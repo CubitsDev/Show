@@ -12,6 +12,7 @@ import network.palace.show.listeners.PlayerInteract;
 import network.palace.show.npc.SoftNPCManager;
 import network.palace.show.utils.BuildUtil;
 import network.palace.show.utils.FileUtil;
+import network.palace.show.utils.UpdateUtil;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -98,6 +99,11 @@ public class ShowPlugin extends JavaPlugin {
 
         Metrics metrics = new Metrics(this, pluginId);
 
+        new UpdateUtil(this, 94141).getVersion(v -> {
+            if (!this.getDescription().getVersion().equalsIgnoreCase(v)) {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "A New update is available for Show! It is always recommended that you upgrade! Link: https://www.spigotmc.org/resources/show-make-huge-spectaculars-in-minecraft.94141/");
+            }
+        });
 
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Show is now enabled!");
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Huge shoutout to Legobuilder0813 for making this work for The Palace Network. Time to let your awesome code shine");
