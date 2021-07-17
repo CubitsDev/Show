@@ -49,8 +49,14 @@ Show	Name    <nameofshow>
 ### Blocks ###
 #http://minecraft-ids.grahamedgecombe.com/
 #Placing Blocks:
+
+### 1.12 :
 <seconds>       Block        id:data      x,y,z
 3	Block	152	0,11,0
+
+### 1.13 :
+<seconds>       Block        block_string      x,y,z
+3	Block	redstone_block	0,11,0
 
 #Pulse: (Sets block to redstone block then back)
 <seconds>       Pulse	x,y,z
@@ -62,8 +68,14 @@ Show	Name    <nameofshow>
 0	Schematic	example	0	12	0	dhs	true
 
 #Fake Blocks: (Tells player a block exists, block doesn't actually (packet magic))
+
+## 1.12 :
 <seconds>       FakeBlock        id:data      x,y,z
 3	FakeBlock	152	0,11,0
+
+## 1.13 :
+<seconds>       FakeBlock        block_string      x,y,z
+3	FakeBlock	redstone_block	0,11,0
 
 
 ### Extra Effects ###
@@ -83,9 +95,16 @@ Colors: Red, Orange, Yellow, Green, Aqua, Blue, Purple, Pink, White, Black (or r
 10	GlowDone
 
 #Fountains: 
+
+## 1.12
 <seconds>	Fountain	id:data	#	x,y,z	<directional force(x,y,z)>
 # = time fountain is on
 2.1	Fountain	35:0	1.9	0,10,0	0,0.8,0
+
+## 1.13
+<seconds>	Fountain	block_string	#	x,y,z	<directional force(x,y,z)>
+# = time fountain is on
+2.1	Fountain	white_wool	1.9	0,10,0	0,0.8,0
 
 ### Commands ###
 #Run commands:
