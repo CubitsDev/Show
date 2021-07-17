@@ -6,7 +6,7 @@
 
     <groupId>network.palace</groupId>
     <artifactId>Show</artifactId>
-    <version>1.5.6</version>
+    <version>1.5.7</version>
     <repositories>
         <repository>
             <id>enginehub-maven</id>

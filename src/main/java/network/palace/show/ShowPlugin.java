@@ -34,7 +34,7 @@ import java.util.Map;
  * Created by Marc on 12/6/16.
  * Updated to be Core free by Tom 07/10/2021
  */
-@Plugin(name = "Show", version = "1.5.6")
+@Plugin(name = "Show", version = "1.5.7")
 @Description(value = "Create Shows in Minecraft with easy to use files!")
 @LoadOrder(value = PluginLoadOrder.POSTWORLD)
 @Author(value = "Legobuilder0813")
