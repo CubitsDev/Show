@@ -31,6 +31,9 @@ public class ShowUtil {
     3.0	FakeBlock AIR	 14,5,1   STAIRS:DATA:DATA
     .
     .
+    STAIRS,BOTTOM,NORTH-TRUE:EAST-FALSE:SOUTH-FALSE:WEST-FALSE,INNER_LEFT
+    .
+    .
     Block Data:
       0           1         2          3       4
     NONE
@@ -47,7 +50,7 @@ public class ShowUtil {
 
             // Block data string params, or null if none
             if (params.length >= 5) {
-                String[] dataParams = params[4].split(":");
+                String[] dataParams = params[4].split(",");
                 BlockDataType type = BlockDataType.valueOf(dataParams[0].toUpperCase());
 
                 switch (type) {
@@ -58,15 +61,33 @@ public class ShowUtil {
                         break;
                     }
                     case FENCE: {
-                        ((Fence) blockData).setFace(BlockFace.valueOf(dataParams[1].split("-")[0].toUpperCase()), Boolean.parseBoolean(dataParams[1].split("-")[1].toUpperCase()));
+                        String[] faces = dataParams[1].split(":");
+
+                        // 1 for each face, true or false
+                        ((Fence) blockData).setFace(BlockFace.valueOf(faces[0].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[0].split("-")[1].toUpperCase()));
+                        ((Fence) blockData).setFace(BlockFace.valueOf(faces[1].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[1].split("-")[1].toUpperCase()));
+                        ((Fence) blockData).setFace(BlockFace.valueOf(faces[2].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[2].split("-")[1].toUpperCase()));
+                        ((Fence) blockData).setFace(BlockFace.valueOf(faces[3].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[3].split("-")[1].toUpperCase()));
                         break;
                     }
                     case GLASS_PANE: {
                         // Plain glass-pane uses the fence block-data not the glass-pane because spaghetti
                         if (blockData.getMaterial().equals(Material.GLASS_PANE)) {
-                            ((Fence) blockData).setFace(BlockFace.valueOf(dataParams[1].split("-")[0].toUpperCase()), Boolean.parseBoolean(dataParams[1].split("-")[1].toUpperCase()));
+                            String[] faces = dataParams[1].split(":");
+
+                            // 1 for each face, true or false
+                            ((Fence) blockData).setFace(BlockFace.valueOf(faces[0].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[0].split("-")[1].toUpperCase()));
+                            ((Fence) blockData).setFace(BlockFace.valueOf(faces[1].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[1].split("-")[1].toUpperCase()));
+                            ((Fence) blockData).setFace(BlockFace.valueOf(faces[2].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[2].split("-")[1].toUpperCase()));
+                            ((Fence) blockData).setFace(BlockFace.valueOf(faces[3].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[3].split("-")[1].toUpperCase()));
                         } else {
-                            ((GlassPane) blockData).setFace(BlockFace.valueOf(dataParams[1].split("-")[0].toUpperCase()), Boolean.parseBoolean(dataParams[1].split("-")[1].toUpperCase()));
+                            String[] faces = dataParams[1].split(":");
+
+                            // 1 for each face, true or false
+                            ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[0].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[0].split("-")[1].toUpperCase()));
+                            ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[1].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[1].split("-")[1].toUpperCase()));
+                            ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[2].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[2].split("-")[1].toUpperCase()));
+                            ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[3].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[3].split("-")[1].toUpperCase()));
                         }
                         break;
                     }

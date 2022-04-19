@@ -3,8 +3,10 @@ package network.palace.show.generator;
 import com.goebl.david.Request;
 import com.goebl.david.Webb;
 import com.google.gson.JsonObject;
+import com.sk89q.util.StringUtil;
 import network.palace.show.ShowPlugin;
 import network.palace.show.actions.FakeBlockAction;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -92,6 +94,9 @@ public class ShowGenerator {
     3.0	FakeBlock AIR	 14,5,1   STAIRS:DATA:DATA
     .
     .
+    STAIRS,BOTTOM,NORTH-TRUE:EAST-FALSE:SOUTH-FALSE:WEST-FALSE,INNER_LEFT
+    .
+    .
     Block Data:
       0           1         2          3       4
     NONE
@@ -108,28 +113,54 @@ public class ShowGenerator {
             String half = ((Stairs) blockData).getHalf().toString();
             String facing = ((Stairs) blockData).getFacing().toString();
             String shape = ((Stairs) blockData).getShape().toString();
-            dataString = "STAIRS:" + half.toUpperCase() + ":" + facing.toUpperCase() + ":" + shape.toUpperCase();
+            dataString = "STAIRS," + half.toUpperCase() + "," + facing.toUpperCase() + "," + shape.toUpperCase();
 
         } else if (blockData instanceof Fence) {
-            String face = ((Fence) blockData).getFaces().iterator().next().toString(); // TODO handle multiple faces, not just first
-            dataString = "FENCE:" + face.toUpperCase();
+            dataString = "FENCE,";
 
-        } else if (blockData instanceof GlassPane) {
-            String face = ((GlassPane) blockData).getFaces().iterator().next().toString(); // TODO handle multiple faces, not just first
-            dataString = "GLASS_PANE:" + face.toUpperCase();
+            // True for included
+            for (BlockFace face : ((Fence) blockData).getFaces()) {
+                dataString = dataString + face.toString().toUpperCase() + "-TRUE:";
+            }
+
+            // False for others
+            if (!dataString.contains("NORTH")) dataString = dataString + "NORTH-FALSE:";
+            if (!dataString.contains("EAST")) dataString = dataString + "EAST-FALSE:";
+            if (!dataString.contains("SOUTH")) dataString = dataString + "SOUTH-FALSE:";
+            if (!dataString.contains("WEST")) dataString = dataString + "WEST-FALSE:";
+
+            // Remove last character
+            dataString = StringUtils.chop(dataString);
+
+        } else if (blockData instanceof GlassPane) { // TODO what does it do with non-stained glass pain?
+            dataString = "GLASS_PANE,";
+
+            // True for included
+            for (BlockFace face : ((GlassPane) blockData).getFaces()) {
+                dataString = dataString + face.toString().toUpperCase() + "-TRUE:";
+            }
+
+            // False for others
+            if (!dataString.contains("NORTH")) dataString = dataString + "NORTH-FALSE:";
+            if (!dataString.contains("EAST")) dataString = dataString + "EAST-FALSE:";
+            if (!dataString.contains("SOUTH")) dataString = dataString + "SOUTH-FALSE:";
+            if (!dataString.contains("WEST")) dataString = dataString + "WEST-FALSE:";
+
+            // Remove last character
+            dataString = StringUtils.chop(dataString);
 
         } else if (blockData instanceof TrapDoor) {
             String half = ((TrapDoor) blockData).getHalf().toString();
             String facing = ((TrapDoor) blockData).getFacing().toString();
             String open = String.valueOf(((TrapDoor) blockData).isOpen());
-            dataString = "TRAPDOOR:" + half.toUpperCase() + ":" + facing.toUpperCase() + ":" + open.toUpperCase();
+            dataString = "TRAPDOOR," + half.toUpperCase() + "," + facing.toUpperCase() + "," + open.toUpperCase();
 
         } else if (blockData instanceof Door) {
             String half = ((Door) blockData).getHalf().toString();
             String facing = ((Door) blockData).getFacing().toString();
             String open = String.valueOf(((Door) blockData).isOpen());
             String hinge = ((Door) blockData).getHinge().toString();
-            dataString = "DOOR:" + half.toUpperCase() + ":" + facing.toUpperCase() + ":" + open.toUpperCase() + ":" + hinge.toUpperCase();
+            dataString = "DOOR," + half.toUpperCase() + "," + facing.toUpperCase() + "," + open.toUpperCase() + "," + hinge.toUpperCase();
 
         }
 
