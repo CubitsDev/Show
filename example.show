@@ -33,7 +33,7 @@ Show	Name    example
 
 
 # Paste castle in background
-#0   Schematic   castle  0   12  0   show-world  true
+0   Schematic   castle  0   12  0   show-world  true
 
 
 # Change stairs to yellow (Packets only)
@@ -77,13 +77,12 @@ Effect	fire	BURST,255;255;255&RED,YELLOW,FLICKER
 Effect	bigFire	BURST,255;255;255&WHITE,ORANGE,FLICKER
 5.6	PowerFirework	0,56,0	bigFire	1,1,0
 
+
 # Make all players glow yellow
 6	Glow	RED 0,12,0	50
 12	GlowDone
 
 
-# interval must be int, no decimal --------------
-# explosion name must be all caps -----------
 # Explosions all over ground from blocks that fly out (Repeating action)
 8 Repeat 5 1 Particle	SMOKE	10,12,0	2	0.2	4	0	20
 
@@ -94,13 +93,13 @@ Effect	bigFire	BURST,255;255;255&WHITE,ORANGE,FLICKER
 ########################### Announcer
 
 # Spawn announcer
-ArmorStand	announcer	false	LEATHER_HELMET,LEATHER_CHESTPLATE,LEATHER_LEGGINGS,LEATHER_BOOTS,STONE -------------
-0   ArmorStand  announcer Spawn -6,12,0,0
+ArmorStand	announcer	false   298,299,300,301,1
+0   ArmorStand  announcer   Spawn -6,12,0,0
 
 
 # Open door
-0.2	FakeBlock	DARK_OAK_DOOR	-5,12,0 DOOR,BOTTOM,WEST,TRUE,LEFT
-0.2	FakeBlock	DARK_OAK_DOOR	-5,13,0 DOOR,TOP,WEST,TRUE,LEFT
+0.2	FakeBlock	DARK_OAK_DOOR   -5,12,0 DOOR,BOTTOM,WEST,TRUE,LEFT
+0.2	FakeBlock	DARK_OAK_DOOR   -5,13,0 DOOR,TOP,WEST,TRUE,LEFT
 
 
 # Walk up to podium
@@ -108,12 +107,12 @@ ArmorStand	announcer	false	LEATHER_HELMET,LEATHER_CHESTPLATE,LEATHER_LEGGINGS,LE
 
 
 # Close door
-1.5	FakeBlock	DARK_OAK_DOOR	-5,12,0 DOOR,BOTTOM,WEST,FALSE,LEFT
-1.5	FakeBlock	DARK_OAK_DOOR	-5,13,0 DOOR,TOP,WEST,FALSE,LEFT
+1.5	FakeBlock	DARK_OAK_DOOR   -5,12,0 DOOR,BOTTOM,WEST,FALSE,LEFT
+1.5	FakeBlock	DARK_OAK_DOOR   -5,13,0 DOOR,TOP,WEST,FALSE,LEFT
 
 
 # Wave
-4   ArmorStand    announcer Position    ARM_LEFT    0,5,3   0.7
+4   ArmorStand  announcer Position  ARM_LEFT    0,5,3   0.7
 
 
 # Play cat disk (2257)
