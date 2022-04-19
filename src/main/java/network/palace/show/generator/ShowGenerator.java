@@ -95,9 +95,9 @@ public class ShowGenerator {
     Block Data:
       0           1         2          3       4
     NONE
-    STAIRS   :   HALF :   FACING  :  SHAPE           -> STAIRS:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:HALF/...
-    FENCE    :   FACE                                -> FENCE:NORTH/EAST/SOUTH/WEST
-    GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST
+    STAIRS   :   HALF :   FACING  :  SHAPE           -> STAIRS:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:INNER_LEFT/...
+    FENCE    :   FACE                                -> FENCE:NORTH/EAST/SOUTH/WEST ex) FENCE:NORTH-TRUE:SOUTH-FALSE
+    GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST ex) GLASS_PANE:NORTH-TRUE:SOUTH-FALSE
     TRAPDOOR  :  HALF :   FACING  :  OPEN            -> TRAPDOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE
     DOOR     :   HALF  :  FACING  :  OPEN  :  HINGE  -> DOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE:LEFT/RIGHT
      */
@@ -111,11 +111,11 @@ public class ShowGenerator {
             dataString = "STAIRS:" + half.toUpperCase() + ":" + facing.toUpperCase() + ":" + shape.toUpperCase();
 
         } else if (blockData instanceof Fence) {
-            String face = ((Fence) blockData).getFaces().toString(); // TODO faces may not be right
+            String face = ((Fence) blockData).getFaces().iterator().next().toString(); // TODO handle multiple faces, not just first
             dataString = "FENCE:" + face.toUpperCase();
 
         } else if (blockData instanceof GlassPane) {
-            String face = ((GlassPane) blockData).getFaces().toString(); // TODO faces may not be right
+            String face = ((GlassPane) blockData).getFaces().iterator().next().toString(); // TODO handle multiple faces, not just first
             dataString = "GLASS_PANE:" + face.toUpperCase();
 
         } else if (blockData instanceof TrapDoor) {

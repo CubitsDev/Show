@@ -4,6 +4,7 @@ import network.palace.show.Show;
 import network.palace.show.ShowPlugin;
 import network.palace.show.exceptions.ShowParseException;
 import network.palace.show.handlers.TitleType;
+import network.palace.show.handlers.particle.CylinderParticle;
 import network.palace.show.sequence.ShowSequence;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
@@ -15,10 +16,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Marc
@@ -36,9 +34,9 @@ public class ShowUtil {
     Block Data:
       0           1         2          3       4
     NONE
-    STAIRS   :   HALF :   FACING  :  SHAPE           -> STAIRS:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:HALF/...
-    FENCE    :   FACE                                -> FENCE:NORTH/EAST/SOUTH/WEST
-    GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST
+    STAIRS   :   HALF :   FACING  :  SHAPE           -> STAIRS:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:INNER_LEFT/...
+    FENCE    :   FACE                                -> FENCE:NORTH/EAST/SOUTH/WEST ex) FENCE:NORTH-TRUE:SOUTH-FALSE
+    GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST ex) GLASS_PANE:NORTH-TRUE:SOUTH-FALSE
     TRAPDOOR  :  HALF :   FACING  :  OPEN            -> TRAPDOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE
     DOOR     :   HALF  :  FACING  :  OPEN  :  HINGE  -> DOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE:LEFT/RIGHT
      */
@@ -48,7 +46,7 @@ public class ShowUtil {
             BlockData blockData = Material.valueOf(params[2].toUpperCase()).createBlockData();
 
             // Block data string params, or null if none
-            if (!params[4].equalsIgnoreCase("NONE")) {
+            if (params.length >= 5) {
                 String[] dataParams = params[4].split(":");
                 BlockDataType type = BlockDataType.valueOf(dataParams[0].toUpperCase());
 
@@ -57,23 +55,33 @@ public class ShowUtil {
                         ((Stairs) blockData).setHalf(Bisected.Half.valueOf(dataParams[1].toUpperCase()));
                         ((Stairs) blockData).setFacing(BlockFace.valueOf(dataParams[2].toUpperCase()));
                         ((Stairs) blockData).setShape(Stairs.Shape.valueOf(dataParams[3].toUpperCase()));
+                        break;
                     }
                     case FENCE: {
-                        ((Fence) blockData).setFace(BlockFace.valueOf(dataParams[1].toUpperCase()), true); // TODO what is the bool for
+                        ((Fence) blockData).setFace(BlockFace.valueOf(dataParams[1].split("-")[0].toUpperCase()), Boolean.parseBoolean(dataParams[1].split("-")[1].toUpperCase()));
+                        break;
                     }
                     case GLASS_PANE: {
-                        ((GlassPane) blockData).setFace(BlockFace.valueOf(dataParams[1].toUpperCase()), true); // TODO what is the bool for
+                        // Plain glass-pane uses the fence block-data not the glass-pane because spaghetti
+                        if (blockData.getMaterial().equals(Material.GLASS_PANE)) {
+                            ((Fence) blockData).setFace(BlockFace.valueOf(dataParams[1].split("-")[0].toUpperCase()), Boolean.parseBoolean(dataParams[1].split("-")[1].toUpperCase()));
+                        } else {
+                            ((GlassPane) blockData).setFace(BlockFace.valueOf(dataParams[1].split("-")[0].toUpperCase()), Boolean.parseBoolean(dataParams[1].split("-")[1].toUpperCase()));
+                        }
+                        break;
                     }
                     case TRAPDOOR: {
                         ((TrapDoor) blockData).setHalf(Bisected.Half.valueOf(dataParams[1].toUpperCase()));
                         ((TrapDoor) blockData).setFacing(BlockFace.valueOf(dataParams[2].toUpperCase()));
-                        ((TrapDoor) blockData).setOpen(Boolean.getBoolean(dataParams[3].toUpperCase()));
+                        ((TrapDoor) blockData).setOpen(Boolean.parseBoolean(dataParams[3].toUpperCase()));
+                        break;
                     }
                     case DOOR: {
                         ((Door) blockData).setHalf(Bisected.Half.valueOf(dataParams[1].toUpperCase()));
                         ((Door) blockData).setFacing(BlockFace.valueOf(dataParams[2].toUpperCase()));
-                        ((Door) blockData).setOpen(Boolean.getBoolean(dataParams[3].toUpperCase()));
+                        ((Door) blockData).setOpen(Boolean.parseBoolean(dataParams[3].toUpperCase()));
                         ((Door) blockData).setHinge(Door.Hinge.valueOf(dataParams[4].toUpperCase()));
+                        break;
                     }
                 }
             }
