@@ -8,6 +8,10 @@ import network.palace.show.actions.FakeBlockAction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.*;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -54,11 +58,11 @@ public class ShowGenerator {
         for (FakeBlockAction action : actions) {
             Location loc = action.getLoc();
             double time = ((int) ((action.getTime() / 1000.0) * 10)) / 10.0;
-            Material mat = action.getMat();
+            Material mat = action.getData().getMaterial();
             int x = loc.getBlockX();
             int y = loc.getBlockY();
             int z = loc.getBlockZ();
-            String actionString = time + "\u0009" + "FakeBlock" + "\u0009" + mat.toString() + "\u0009" + x + "," + y + "," + z;
+            String actionString = time + "\u0009" + "FakeBlock" + "\u0009" + mat + "\u0009" + x + "," + y + "," + z + "\u0009" + getBlockDataString(action.getData());
             content.append(actionString).append("\n");
         }
 
@@ -79,5 +83,56 @@ public class ShowGenerator {
         JSONObject response = req.asJsonObject().getBody();
 
         return response.getString("html_url");
+    }
+
+    /*
+    Whole Line:
+     0      1      2       3             4
+    TIME ACTION MATERIAL COORDS      BLOCK_DATA
+    3.0	FakeBlock AIR	 14,5,1   STAIRS:DATA:DATA
+    .
+    .
+    Block Data:
+      0           1         2          3       4
+    NONE
+    STAIRS   :   HALF :   FACING  :  SHAPE           -> STAIRS:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:HALF/...
+    FENCE    :   FACE                                -> FENCE:NORTH/EAST/SOUTH/WEST
+    GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST
+    TRAPDOOR  :  HALF :   FACING  :  OPEN            -> TRAPDOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE
+    DOOR     :   HALF  :  FACING  :  OPEN  :  HINGE  -> DOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE:LEFT/RIGHT
+     */
+    private String getBlockDataString(BlockData blockData) {
+        String dataString = "NONE";
+
+        if (blockData instanceof Stairs) {
+            String half = ((Stairs) blockData).getHalf().toString();
+            String facing = ((Stairs) blockData).getFacing().toString();
+            String shape = ((Stairs) blockData).getShape().toString();
+            dataString = "STAIRS:" + half.toUpperCase() + ":" + facing.toUpperCase() + ":" + shape.toUpperCase();
+
+        } else if (blockData instanceof Fence) {
+            String face = ((Fence) blockData).getFaces().toString(); // TODO faces may not be right
+            dataString = "FENCE:" + face.toUpperCase();
+
+        } else if (blockData instanceof GlassPane) {
+            String face = ((GlassPane) blockData).getFaces().toString(); // TODO faces may not be right
+            dataString = "GLASS_PANE:" + face.toUpperCase();
+
+        } else if (blockData instanceof TrapDoor) {
+            String half = ((TrapDoor) blockData).getHalf().toString();
+            String facing = ((TrapDoor) blockData).getFacing().toString();
+            String open = String.valueOf(((TrapDoor) blockData).isOpen());
+            dataString = "TRAPDOOR:" + half.toUpperCase() + ":" + facing.toUpperCase() + ":" + open.toUpperCase();
+
+        } else if (blockData instanceof Door) {
+            String half = ((Door) blockData).getHalf().toString();
+            String facing = ((Door) blockData).getFacing().toString();
+            String open = String.valueOf(((Door) blockData).isOpen());
+            String hinge = ((Door) blockData).getHinge().toString();
+            dataString = "DOOR:" + half.toUpperCase() + ":" + facing.toUpperCase() + ":" + open.toUpperCase() + ":" + hinge.toUpperCase();
+
+        }
+
+        return dataString;
     }
 }

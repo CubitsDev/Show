@@ -118,9 +118,8 @@ public class GenerateCommand {
                                     continue;
                                 }
                                 Material material = newBlock.getType();
-                                byte data = newBlock.getData();
                                 FakeBlockAction act = new FakeBlockAction(null, (long) (localTime * 1000));
-                                act.setMat(material);
+                                act.setData(newBlock.getBlockData());
                                 act.setLoc(new Location(corner.getWorld(), corner.getBlockX() + x, corner.getBlockY() + y, corner.getBlockZ() + z));
                                 actions.add(act);
                             }

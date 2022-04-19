@@ -82,7 +82,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.20</version>
+      <version>1.18.22</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -96,11 +96,17 @@
       <artifactId>worldedit-bukkit</artifactId>
       <version>7.2.0-SNAPSHOT</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>bstats-bukkit</artifactId>
+          <groupId>org.bstats</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>io.netty</groupId>
       <artifactId>netty-buffer</artifactId>
-      <version>4.1.51.Final</version>
+      <version>4.1.75.Final</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -112,7 +118,7 @@
     <dependency>
       <groupId>com.craftmend.openaudiomc</groupId>
       <artifactId>OpenAudioMc</artifactId>
-      <version>6.5.4</version>
+      <version>6.6.3</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

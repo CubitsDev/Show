@@ -3,10 +3,13 @@ package network.palace.show.utils;
 import network.palace.show.Show;
 import network.palace.show.ShowPlugin;
 import network.palace.show.exceptions.ShowParseException;
-import network.palace.show.handlers.BlockData;
 import network.palace.show.handlers.TitleType;
 import network.palace.show.sequence.ShowSequence;
 import org.bukkit.*;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.*;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -23,25 +26,61 @@ import java.util.List;
  */
 public class ShowUtil {
 
+    /*
+    Whole Line:
+     0      1      2       3             4
+    TIME ACTION MATERIAL COORDS      BLOCK_DATA
+    3.0	FakeBlock AIR	 14,5,1   STAIRS:DATA:DATA
+    .
+    .
+    Block Data:
+      0           1         2          3       4
+    NONE
+    STAIRS   :   HALF :   FACING  :  SHAPE           -> STAIRS:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:HALF/...
+    FENCE    :   FACE                                -> FENCE:NORTH/EAST/SOUTH/WEST
+    GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST
+    TRAPDOOR  :  HALF :   FACING  :  OPEN            -> TRAPDOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE
+    DOOR     :   HALF  :  FACING  :  OPEN  :  HINGE  -> DOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE:LEFT/RIGHT
+     */
     public static BlockData getBlockData(String s) throws ShowParseException {
-        String[] list;
-        if (s.contains(":")) {
-            list = s.split(":");
-        } else {
-            list = null;
-        }
         try {
-            int id;
-            byte data;
-            if (list != null) {
-                id = Integer.parseInt(list[0]);
-                data = Byte.parseByte(list[1]);
-            } else {
-                id = Integer.parseInt(s);
-                data = (byte) 0;
+            String[] params = s.split("\u0009");
+            BlockData blockData = Material.valueOf(params[2].toUpperCase()).createBlockData();
+
+            // Block data string params, or null if none
+            if (!params[4].equalsIgnoreCase("NONE")) {
+                String[] dataParams = params[4].split(":");
+                BlockDataType type = BlockDataType.valueOf(dataParams[0].toUpperCase());
+
+                switch (type) {
+                    case STAIRS: {
+                        ((Stairs) blockData).setHalf(Bisected.Half.valueOf(dataParams[1].toUpperCase()));
+                        ((Stairs) blockData).setFacing(BlockFace.valueOf(dataParams[2].toUpperCase()));
+                        ((Stairs) blockData).setShape(Stairs.Shape.valueOf(dataParams[3].toUpperCase()));
+                    }
+                    case FENCE: {
+                        ((Fence) blockData).setFace(BlockFace.valueOf(dataParams[1].toUpperCase()), true); // TODO what is the bool for
+                    }
+                    case GLASS_PANE: {
+                        ((GlassPane) blockData).setFace(BlockFace.valueOf(dataParams[1].toUpperCase()), true); // TODO what is the bool for
+                    }
+                    case TRAPDOOR: {
+                        ((TrapDoor) blockData).setHalf(Bisected.Half.valueOf(dataParams[1].toUpperCase()));
+                        ((TrapDoor) blockData).setFacing(BlockFace.valueOf(dataParams[2].toUpperCase()));
+                        ((TrapDoor) blockData).setOpen(Boolean.getBoolean(dataParams[3].toUpperCase()));
+                    }
+                    case DOOR: {
+                        ((Door) blockData).setHalf(Bisected.Half.valueOf(dataParams[1].toUpperCase()));
+                        ((Door) blockData).setFacing(BlockFace.valueOf(dataParams[2].toUpperCase()));
+                        ((Door) blockData).setOpen(Boolean.getBoolean(dataParams[3].toUpperCase()));
+                        ((Door) blockData).setHinge(Door.Hinge.valueOf(dataParams[4].toUpperCase()));
+                    }
+                }
             }
-            return new BlockData(id, data);
-        } catch (Exception ignored) {
+
+            return blockData;
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new ShowParseException("Invalid Block ID or Block data");
         }
     }

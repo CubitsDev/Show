@@ -2,8 +2,6 @@ package network.palace.show.actions;
 
 import network.palace.show.Show;
 import network.palace.show.exceptions.ShowParseException;
-import network.palace.show.handlers.BlockData;
-import network.palace.show.utils.ShowUtil;
 import network.palace.show.utils.WorldUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
