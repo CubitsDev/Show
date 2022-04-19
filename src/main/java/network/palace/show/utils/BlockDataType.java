@@ -5,5 +5,6 @@ public enum BlockDataType {
     FENCE,
     GLASS_PANE,
     TRAPDOOR,
-    DOOR
+    DOOR,
+    SLAB
 }

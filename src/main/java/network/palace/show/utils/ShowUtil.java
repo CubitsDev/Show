@@ -37,6 +37,7 @@ public class ShowUtil {
     GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST ex) GLASS_PANE:NORTH-TRUE:SOUTH-FALSE
     TRAPDOOR  :  HALF :   FACING  :  OPEN            -> TRAPDOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE
     DOOR     :   HALF  :  FACING  :  OPEN  :  HINGE  -> DOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE:LEFT/RIGHT
+    SLAB    :    TYPE                                -> SLAB:TOP/BOTTOM/DOUBLE
      */
     public static BlockData getBlockData(String s) throws ShowParseException {
         try {
@@ -97,6 +98,9 @@ public class ShowUtil {
                         ((Door) blockData).setFacing(BlockFace.valueOf(dataParams[2].toUpperCase()));
                         ((Door) blockData).setOpen(Boolean.parseBoolean(dataParams[3].toUpperCase()));
                         ((Door) blockData).setHinge(Door.Hinge.valueOf(dataParams[4].toUpperCase()));
+                        break;
+                    } case SLAB: {
+                        ((Slab) blockData).setType(Slab.Type.valueOf(dataParams[1].toUpperCase()));
                         break;
                     }
                 }

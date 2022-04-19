@@ -99,6 +99,7 @@ public class ShowGenerator {
     GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST ex) GLASS_PANE:NORTH-TRUE:SOUTH-FALSE
     TRAPDOOR  :  HALF :   FACING  :  OPEN            -> TRAPDOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE
     DOOR     :   HALF  :  FACING  :  OPEN  :  HINGE  -> DOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE:LEFT/RIGHT
+    SLAB    :    TYPE                                -> SLAB:TOP/BOTTOM/DOUBLE
      */
     private String getBlockDataString(BlockData blockData) {
         StringBuilder dataString = new StringBuilder();
@@ -156,6 +157,9 @@ public class ShowGenerator {
             String hinge = ((Door) blockData).getHinge().toString();
             dataString = new StringBuilder("DOOR," + half.toUpperCase() + "," + facing.toUpperCase() + "," + open.toUpperCase() + "," + hinge.toUpperCase());
 
+        } else if (blockData instanceof Slab) {
+            String type = ((Slab) blockData).getType().toString();
+            dataString = new StringBuilder("SLAB," + type.toUpperCase());
         }
 
         return dataString.toString();
