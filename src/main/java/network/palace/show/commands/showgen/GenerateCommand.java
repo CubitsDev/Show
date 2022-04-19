@@ -158,6 +158,6 @@ public class GenerateCommand {
     }
 
     private boolean compare(int x, int y, boolean inverted) {
-        return inverted == (x <= y); 
+        return inverted == (x <= y);
     }
 }

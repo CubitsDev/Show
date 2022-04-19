@@ -31,7 +31,6 @@ import org.bukkit.plugin.java.annotation.plugin.author.Author;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.file.FileSystemNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +38,7 @@ import java.util.Map;
  * Created by Marc on 12/6/16.
  * Updated to be Core free by Tom 07/10/2021
  */
-@Plugin(name = "Show", version = "1.6.0")
+@Plugin(name = "Show", version = "1.6.1")
 @Description(value = "Create Shows in Minecraft with easy to use files!")
 @LoadOrder(value = PluginLoadOrder.POSTWORLD)
 @Author(value = "Legobuilder0813")
