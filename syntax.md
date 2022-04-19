@@ -67,7 +67,7 @@ FakeBlock   <blockName> <x,y,z> <data>
 ```
 `BlockName` Human-readable name of the block. [Block Names & Ids](http://minecraft-ids.grahamedgecombe.com/)  
 `x,y,z` Coordinates to place the block at.  
-`data` Extra block data (Optional) [Block Data Guide](http://UNKNOWN/)  
+`data` Extra block data (Optional) [Block Data](# Fake Block Data)  
 
 <details>
   <summary>Click To View 1.12 Syntax</summary>
@@ -128,7 +128,7 @@ Fountain   <blockName> <time>   <x,y,z> <directional-force-vector>
 `BlockName` Human-readable name of the block. [Block Names & Ids](http://minecraft-ids.grahamedgecombe.com/)  
 `time` How long to run for.  
 `x,y,z` Coordinates to shoot from.  
-`directional-force-vector` Force applied to each block, in the format of a vector.  [Vectors](https://UNKNOWN/)  
+`directional-force-vector` Force applied to each block, in the format of a vector.  [Vectors](https://www.spigotmc.org/wiki/vector-programming-for-beginners/)  
 
 <details>
   <summary>Click To View 1.12 Syntax</summary>
@@ -139,7 +139,7 @@ Fountain   <id:data> <time>   <x,y,z> <directional-force-vector>
 `id:data` Numerical id of the block. [Block Names & Ids](http://minecraft-ids.grahamedgecombe.com/)
 `time` How long to run for.  
 `x,y,z` Coordinates to shoot from.  
-`directional-force-vector` Force applied to each block, in the format of a vector.  [Vectors](https://UNKNOWN/)  
+`directional-force-vector` Force applied to each block, in the format of a vector.  [Vectors](https://www.spigotmc.org/wiki/vector-programming-for-beginners/)  
 </details>
 <br/>
 
@@ -171,7 +171,7 @@ AudioOnce   <volume>  <url>
 <br/>
 
 ### Audio Region
-Starts playing the audio (Using OpenAudioMC) for everyone in the region. [OpenAudioMC](https://help.openaudiomc.net/)
+Starts playing the audio (Using OpenAudioMC) for everyone in the region. [OpenAudioMC](https://help.openaudiomc.net/)  
 ```
 AudioRegion <region>    <length>    <volume>    <url>
 ```
@@ -216,7 +216,7 @@ Firework    <x,y,z> <effects>   <time>  <directional-force-vector>	1
 `x,y,z` Coordinates to shoot from.  
 `effects` Previously defined effects, comma separated. (No Spaces)  
 `time` How long to run for.  
-`directional-force-vector` Force applied to the firework, in the format of a vector.  [Vectors](https://UNKNOWN/)  
+`directional-force-vector` Force applied to the firework, in the format of a vector.  [Vectors](https://www.spigotmc.org/wiki/vector-programming-for-beginners/)  
 <br/>
 
 ### Power Firework
@@ -226,7 +226,7 @@ PowerFirework   <x,y,z> <effects>   <directional-force-vector>
 ```
 `x,y,z` Coordinates to shoot from.  
 `effects` Previously defined effects, comma separated. (No Spaces)  
-`directional-force-vector` Force applied to the firework, in the format of a vector.  [Vectors](https://UNKNOWN/)  
+`directional-force-vector` Force applied to the firework, in the format of a vector.  [Vectors](https://www.spigotmc.org/wiki/vector-programming-for-beginners/)  
 <br/>
 
 ## Armorstands
@@ -292,3 +292,25 @@ Armorstand   <name> Despawn
 ```
 `name` Unique name of the armorstand.  
 <br/>
+
+# Fake Block Data
+Data is optional, just omit it if you want to retain the default values, or if the block doesn't have data.  
+If you choose to include data, it must be exactly as described below.  
+
+**Format:**
+`<dataType>,<param1>,<param2>,etc...`
+```
+STAIRS,<half>,<facing>,<shape>
+FENCE,<face>
+GLASS_PANE,<face>
+TRAPDOOR,<half>,<facing>,<open>
+DOOR,<half>,<facing>,<open>,<hinge>
+SLAB,<type>
+```
+`half` Right side up or upside down: `BOTTOM`, `TOP`.  
+`facing` Direction its facing: `NORTH`, `EAST`, `SOUTH`, `WEST`.  
+`shape` For stairs, it's the shape: `INNER_LEFT`, `INNER_RIGHT`, `OUTER_LEFT`, `OUTER_RIGHT`, `STRAIGHT`.  
+`face` Direction(s) it has faces on, must include all 4, separated by `:`. Example: `NORTH-TRUE:EAST-FALSE:SOUTH-FALSE:WEST-TRUE`.  
+`open` If it's open or not: `TRUE`, `FALSE`.  
+`hinge` Where the door hinge is: `LEFT`, `RIGHT`.  
+`type` What type of slab: `TOP`, `BOTTOM`, `DOUBLE`.  
