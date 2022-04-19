@@ -4,7 +4,6 @@ import network.palace.show.Show;
 import network.palace.show.ShowPlugin;
 import network.palace.show.exceptions.ShowParseException;
 import network.palace.show.handlers.TitleType;
-import network.palace.show.handlers.particle.CylinderParticle;
 import network.palace.show.sequence.ShowSequence;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
@@ -31,12 +30,8 @@ public class ShowUtil {
     3.0	FakeBlock AIR	 14,5,1   STAIRS:DATA:DATA
     .
     .
-    STAIRS,BOTTOM,NORTH-TRUE:EAST-FALSE:SOUTH-FALSE:WEST-FALSE,INNER_LEFT
-    .
-    .
     Block Data:
       0           1         2          3       4
-    NONE
     STAIRS   :   HALF :   FACING  :  SHAPE           -> STAIRS:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:INNER_LEFT/...
     FENCE    :   FACE                                -> FENCE:NORTH/EAST/SOUTH/WEST ex) FENCE:NORTH-TRUE:SOUTH-FALSE
     GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST ex) GLASS_PANE:NORTH-TRUE:SOUTH-FALSE
@@ -392,7 +387,7 @@ public class ShowUtil {
                 .filter(p -> p.hasPermission("show.debug") && ShowPlugin.debugMap.containsKey(p.getDisplayName()))
                 .forEach(p -> p.sendMessage(ChatColor.AQUA + "[ShowDebug - " + showName + "] " + ChatColor.YELLOW + message));
 
-        Show s = ShowPlugin.getInstance().getShows().get(showName);
+        Show s = ShowPlugin.getShows().get(showName);
         if (s != null) s.debug();
     }
 }

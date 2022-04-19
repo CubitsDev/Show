@@ -109,15 +109,16 @@ public class GenerateCommand {
                         changeInTime = delayPerLayer;
                     }
 
+
+                    // y is startingY, and is incremented by yChange every loop until y is equal to endingY.
                     for (int y = startingY; compare(y, endingY, !bottom); y += yChange) {
                         for (int x = 0; x < initialScene.getXLength(); x++) {
                             for (int z = 0; z < initialScene.getZLength(); z++) {
                                 Block oldBlock = initialScene.getBlock(x, y, z);
                                 Block newBlock = finalScene.getBlock(x, y, z);
-                                if (newBlock.getType().equals(oldBlock.getType()) && newBlock.getData() == oldBlock.getData()) {
+                                if (newBlock.getType().equals(oldBlock.getType()) && newBlock.getBlockData().matches(oldBlock.getBlockData())) {
                                     continue;
                                 }
-                                Material material = newBlock.getType();
                                 FakeBlockAction act = new FakeBlockAction(null, (long) (localTime * 1000));
                                 act.setData(newBlock.getBlockData());
                                 act.setLoc(new Location(corner.getWorld(), corner.getBlockX() + x, corner.getBlockY() + y, corner.getBlockZ() + z));
@@ -126,6 +127,7 @@ public class GenerateCommand {
                         }
                         localTime += changeInTime;
                     }
+
 
                     if (actions.isEmpty()) {
                         player.sendMessage(ChatColor.RED + "There aren't any differences between the two selected regions!");
@@ -156,6 +158,6 @@ public class GenerateCommand {
     }
 
     private boolean compare(int x, int y, boolean inverted) {
-        return inverted == (x >= y);
+        return inverted == (x <= y); 
     }
 }

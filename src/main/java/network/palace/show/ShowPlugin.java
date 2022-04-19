@@ -19,6 +19,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.PluginLoadOrder;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,6 +31,7 @@ import org.bukkit.plugin.java.annotation.plugin.author.Author;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.file.FileSystemNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +54,7 @@ import java.util.Map;
 @Command(name = "show", desc = "Main show command", permission = "show.main", permissionMessage = "You do not have permission!", usage = "/show [list|start|stop]")
 @Command(name = "showdebug", desc = "Showdebug command", permission = "show.debug", permissionMessage = "You do not have permission!", usage = "/showdebug")
 @Command(name = "showgen", desc = "Showgen commands", permission = "show.showgen", permissionMessage = "You do not have permission!", usage = "/showgen")
-public class ShowPlugin extends JavaPlugin {
+public class ShowPlugin extends JavaPlugin implements Listener {
     @Getter private ArmorStandManager armorStandManager;
     @Getter private FountainManager fountainManager;
     @Getter private static ShowGenerator showGenerator;
@@ -103,13 +105,14 @@ public class ShowPlugin extends JavaPlugin {
         }
 
 
-        //has to be loaded after github token
+        // Has to be loaded after github token
         showGenerator = new ShowGenerator();
 
 
         this.getServer().getPluginManager().registerEvents(fountainManager, this);
         this.getServer().getPluginManager().registerEvents(new PlayerInteract(), this);
         this.getServer().getPluginManager().registerEvents(new ChunkListener(), this);
+        this.getServer().getPluginManager().registerEvents(this, this);
 
         // Show Ticker
         taskid = Bukkit.getScheduler().runTaskTimer(this, () -> {
@@ -128,7 +131,7 @@ public class ShowPlugin extends JavaPlugin {
 
         new UpdateUtil(this, 94141).getVersion(v -> {
             if (!this.getDescription().getVersion().equalsIgnoreCase(v)) {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Show] A New update is available for Show! It is always recommended that you upgrade! Link: https://www.spigotmc.org/resources/show-make-huge-spectaculars-in-minecraft.94141/");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[Show] " + ChatColor.RED + "A New update is available for Show! It is always recommended that you upgrade! Link: https://www.spigotmc.org/resources/show-make-huge-spectaculars-in-minecraft.94141/");
             }
         });
 

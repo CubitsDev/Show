@@ -3,21 +3,19 @@ package network.palace.show.generator;
 import com.goebl.david.Request;
 import com.goebl.david.Webb;
 import com.google.gson.JsonObject;
-import com.sk89q.util.StringUtil;
 import network.palace.show.ShowPlugin;
 import network.palace.show.actions.FakeBlockAction;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.*;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class ShowGenerator {
@@ -45,7 +43,7 @@ public class ShowGenerator {
         generatorSessions.remove(uuid);
     }
 
-    public String postGist(List<FakeBlockAction> actions, String name) throws Exception {
+    public String postGist(List<FakeBlockAction> actions, String name) {
         Webb webb = Webb.create();
 
         JsonObject obj = new JsonObject();
@@ -64,7 +62,9 @@ public class ShowGenerator {
             int x = loc.getBlockX();
             int y = loc.getBlockY();
             int z = loc.getBlockZ();
-            String actionString = time + "\u0009" + "FakeBlock" + "\u0009" + mat + "\u0009" + x + "," + y + "," + z + "\u0009" + getBlockDataString(action.getData());
+            String actionString = time + "\u0009" + "FakeBlock" + "\u0009" + mat + "\u0009" + x + "," + y + "," + z;
+            // If data, add to end
+            if (!Objects.equals(getBlockDataString(action.getData()), "")) actionString += "\u0009" + getBlockDataString(action.getData());
             content.append(actionString).append("\n");
         }
 
@@ -73,8 +73,6 @@ public class ShowGenerator {
         files.add(name + ".show", file);
 
         obj.add("files", files);
-
-        System.out.println("SENDING (" + actions.size() + "): " + obj.toString());
 
         Request req = webb.post("https://api.github.com/gists")
                 .header("Accept", "application/vnd.github.v3+json")
@@ -94,12 +92,8 @@ public class ShowGenerator {
     3.0	FakeBlock AIR	 14,5,1   STAIRS:DATA:DATA
     .
     .
-    STAIRS,BOTTOM,NORTH-TRUE:EAST-FALSE:SOUTH-FALSE:WEST-FALSE,INNER_LEFT
-    .
-    .
     Block Data:
       0           1         2          3       4
-    NONE
     STAIRS   :   HALF :   FACING  :  SHAPE           -> STAIRS:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:INNER_LEFT/...
     FENCE    :   FACE                                -> FENCE:NORTH/EAST/SOUTH/WEST ex) FENCE:NORTH-TRUE:SOUTH-FALSE
     GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST ex) GLASS_PANE:NORTH-TRUE:SOUTH-FALSE
@@ -107,63 +101,63 @@ public class ShowGenerator {
     DOOR     :   HALF  :  FACING  :  OPEN  :  HINGE  -> DOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE:LEFT/RIGHT
      */
     private String getBlockDataString(BlockData blockData) {
-        String dataString = "NONE";
+        StringBuilder dataString = new StringBuilder();
 
         if (blockData instanceof Stairs) {
             String half = ((Stairs) blockData).getHalf().toString();
             String facing = ((Stairs) blockData).getFacing().toString();
             String shape = ((Stairs) blockData).getShape().toString();
-            dataString = "STAIRS," + half.toUpperCase() + "," + facing.toUpperCase() + "," + shape.toUpperCase();
+            dataString = new StringBuilder("STAIRS," + half.toUpperCase() + "," + facing.toUpperCase() + "," + shape.toUpperCase());
 
         } else if (blockData instanceof Fence) {
-            dataString = "FENCE,";
+            dataString = new StringBuilder("FENCE,");
 
             // True for included
             for (BlockFace face : ((Fence) blockData).getFaces()) {
-                dataString = dataString + face.toString().toUpperCase() + "-TRUE:";
+                dataString.append(face.toString().toUpperCase()).append("-TRUE:");
             }
 
             // False for others
-            if (!dataString.contains("NORTH")) dataString = dataString + "NORTH-FALSE:";
-            if (!dataString.contains("EAST")) dataString = dataString + "EAST-FALSE:";
-            if (!dataString.contains("SOUTH")) dataString = dataString + "SOUTH-FALSE:";
-            if (!dataString.contains("WEST")) dataString = dataString + "WEST-FALSE:";
+            if (!dataString.toString().contains("NORTH")) dataString.append("NORTH-FALSE:");
+            if (!dataString.toString().contains("EAST")) dataString.append("EAST-FALSE:");
+            if (!dataString.toString().contains("SOUTH")) dataString.append("SOUTH-FALSE:");
+            if (!dataString.toString().contains("WEST")) dataString.append("WEST-FALSE:");
 
             // Remove last character
-            dataString = StringUtils.chop(dataString);
+            dataString = new StringBuilder(StringUtils.chop(dataString.toString()));
 
-        } else if (blockData instanceof GlassPane) { // TODO what does it do with non-stained glass pain?
-            dataString = "GLASS_PANE,";
+        } else if (blockData instanceof GlassPane) {
+            dataString = new StringBuilder("GLASS_PANE,");
 
             // True for included
             for (BlockFace face : ((GlassPane) blockData).getFaces()) {
-                dataString = dataString + face.toString().toUpperCase() + "-TRUE:";
+                dataString.append(face.toString().toUpperCase()).append("-TRUE:");
             }
 
             // False for others
-            if (!dataString.contains("NORTH")) dataString = dataString + "NORTH-FALSE:";
-            if (!dataString.contains("EAST")) dataString = dataString + "EAST-FALSE:";
-            if (!dataString.contains("SOUTH")) dataString = dataString + "SOUTH-FALSE:";
-            if (!dataString.contains("WEST")) dataString = dataString + "WEST-FALSE:";
+            if (!dataString.toString().contains("NORTH")) dataString.append("NORTH-FALSE:");
+            if (!dataString.toString().contains("EAST")) dataString.append("EAST-FALSE:");
+            if (!dataString.toString().contains("SOUTH")) dataString.append("SOUTH-FALSE:");
+            if (!dataString.toString().contains("WEST")) dataString.append("WEST-FALSE:");
 
             // Remove last character
-            dataString = StringUtils.chop(dataString);
+            dataString = new StringBuilder(StringUtils.chop(dataString.toString()));
 
         } else if (blockData instanceof TrapDoor) {
             String half = ((TrapDoor) blockData).getHalf().toString();
             String facing = ((TrapDoor) blockData).getFacing().toString();
             String open = String.valueOf(((TrapDoor) blockData).isOpen());
-            dataString = "TRAPDOOR," + half.toUpperCase() + "," + facing.toUpperCase() + "," + open.toUpperCase();
+            dataString = new StringBuilder("TRAPDOOR," + half.toUpperCase() + "," + facing.toUpperCase() + "," + open.toUpperCase());
 
         } else if (blockData instanceof Door) {
             String half = ((Door) blockData).getHalf().toString();
             String facing = ((Door) blockData).getFacing().toString();
             String open = String.valueOf(((Door) blockData).isOpen());
             String hinge = ((Door) blockData).getHinge().toString();
-            dataString = "DOOR," + half.toUpperCase() + "," + facing.toUpperCase() + "," + open.toUpperCase() + "," + hinge.toUpperCase();
+            dataString = new StringBuilder("DOOR," + half.toUpperCase() + "," + facing.toUpperCase() + "," + open.toUpperCase() + "," + hinge.toUpperCase());
 
         }
 
-        return dataString;
+        return dataString.toString();
     }
 }
