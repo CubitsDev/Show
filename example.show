@@ -1,0 +1,132 @@
+########################### Show Details
+Show	Location	0,10,0
+Show	TextRadius	150
+Show	Name    example
+
+
+
+
+
+########################### Start Sequence
+
+# Set time night
+0	Command	time	set	midnight
+
+
+# Start background music in show region
+0   AudioRegion show-region 200  70  https://media.server.net/audio/music/show.mp3
+
+
+# Starting msg
+0	Text	&eWelcome to the example show!  Please wait, the show will be starting very soon.
+
+
+# Welcome title
+0	Title	title	10	10	40	&aWelcome
+0	Title	subtitle	10	10	40	&eShow starting soon!
+
+
+# Podium raise up
+0	Block	STONE	0,11,0
+1	Block	STONE	0,12,0
+2	Block	STONE	0,13,0
+
+
+# Paste castle in background
+#0   Schematic   castle  0   12  0   show-world  true
+
+
+# Change stairs to yellow (Packets only)
+0	FakeBlock	SANDSTONE_STAIRS	0,11,0  STAIRS,TOP,SOUTH,STRAIGHT
+0	FakeBlock	SANDSTONE_STAIRS	1,10,0  STAIRS,TOP,SOUTH,STRAIGHT
+0	FakeBlock	SANDSTONE_STAIRS	2,9,0  STAIRS,TOP,SOUTH,STRAIGHT
+
+
+# Pulse redstone signal to start command blocks for waterfall
+5	Pulse	0,5,0
+
+
+
+
+
+########################### Castle Explosion
+
+# Lightning strikes top of castle
+5	Lightning	0,56,0
+
+
+# Explosion on strike
+5.5 Particle	SMOKE	0,56.3,0	2	0.2	4	0	20
+
+
+# Explosion sound
+5.6 AudioOnce 70  https://media.server.net/audio/effects/explosion.mp3
+
+
+# Blocks from castle fly out at audience
+5.6	Fountain	SPRUCE_PLANKS	5	0,56,0	2,0.3,0
+
+
+# Explosion fireworks
+Effect	fire	BURST,255;255;255&RED,YELLOW,FLICKER
+5.6	Firework	0,56,0	fire	1	0,1,1	1
+5.6	Firework	0,56,0	fire	1	0,1,-1	1
+
+
+# Big firework comes to audience
+Effect	bigFire	BURST,255;255;255&WHITE,ORANGE,FLICKER
+5.6	PowerFirework	0,56,0	bigFire	1,1,0
+
+# Make all players glow yellow
+6	Glow	RED 0,12,0	50
+12	GlowDone
+
+
+# interval must be int, no decimal --------------
+# explosion name must be all caps -----------
+# Explosions all over ground from blocks that fly out (Repeating action)
+8 Repeat 5 1 Particle	SMOKE	10,12,0	2	0.2	4	0	20
+
+
+
+
+
+########################### Announcer
+
+# Spawn announcer
+ArmorStand	announcer	false	LEATHER_HELMET,LEATHER_CHESTPLATE,LEATHER_LEGGINGS,LEATHER_BOOTS,STONE -------------
+0   ArmorStand  announcer Spawn -6,12,0,0
+
+
+# Open door
+0.2	FakeBlock	DARK_OAK_DOOR	-5,12,0 DOOR,BOTTOM,WEST,TRUE,LEFT
+0.2	FakeBlock	DARK_OAK_DOOR	-5,13,0 DOOR,TOP,WEST,TRUE,LEFT
+
+
+# Walk up to podium
+1   ArmorStand announcer    Move    0,12,0  3
+
+
+# Close door
+1.5	FakeBlock	DARK_OAK_DOOR	-5,12,0 DOOR,BOTTOM,WEST,FALSE,LEFT
+1.5	FakeBlock	DARK_OAK_DOOR	-5,13,0 DOOR,TOP,WEST,FALSE,LEFT
+
+
+# Wave
+4   ArmorStand    announcer Position    ARM_LEFT    0,5,3   0.7
+
+
+# Play cat disk (2257)
+4   Music   2257
+
+
+# Turn around
+6   ArmorStand  announcer   Rotate  -180    1
+
+
+# Walk away
+6.7   ArmorStand announcer    Move    -6,12,0  3
+
+
+# Despawn
+9   ArmorStand  announcer   Despawn
