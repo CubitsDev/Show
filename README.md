@@ -30,6 +30,9 @@ To run your new show, simple use the command:
 ```/show start test```
 
 Congratulations, you just made your first super basic show!  
+
+You can view an example show with all the available actions here.  
+**Example:** https://github.com/CubitsDev/Show/blob/master/example.show
 <br/>
 
 ## Showgen
