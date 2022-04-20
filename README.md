@@ -64,12 +64,13 @@ If you have done everything correct, this should send you a link with your new l
 Keep in mind, large selections may take some time to process.  
 <br/>
 
-# Commands
+## Commands
 `/show - Main command - show.main (permission)`  
 `/showdebug - Debug Command - show.debug (permission)`  
 `/showgen - Generation Commands - show.showgen (permission)`  
+<br/>
 
-# FAQ
+## FAQ
 **Q:** My show says it has started but does nothing!  
 **A:** Run `/showdebug` to see any errors. It should give a reason and which line has caused it.  
 
@@ -78,8 +79,9 @@ Keep in mind, large selections may take some time to process.
 
 **Q:** The audio isn't on time!  
 **A:** This tends to be from users' internet connections and OpenAudioMC playing files. For the regions, it'll auto catch up, but single sounds may be out of time. Having a CDN would be the best but most expensive solution.  
+<br/>
 
-# Missing/Future Stuff
+## Missing/Future Stuff
 Right now certain things such as `ShowBuild` had to be temporarily removed as they would require some reworking to get them in a nice way again.  
 That's not to say they won't be added back in future though, and contributions are welcomed!  
 
