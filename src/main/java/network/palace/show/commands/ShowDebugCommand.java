@@ -11,17 +11,20 @@ public class ShowDebugCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-
-            if (!ShowPlugin.debugMap.containsKey(player.getDisplayName())) {
-                ShowPlugin.debugMap.put(player.getDisplayName(), true);
-                player.sendMessage(ChatColor.AQUA + "[ShowDebug] - " + ChatColor.GREEN + "Enabled");
-            } else {
-                ShowPlugin.debugMap.remove(player.getDisplayName());
-                player.sendMessage(ChatColor.AQUA + "[ShowDebug] - " + ChatColor.RED + "Disabled");
-            }
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + "Debug is always enabled for console!");
+            return true;
         }
-        return false;
+
+        Player player = (Player) sender;
+
+        if (!ShowPlugin.debugMap.containsKey(player.getDisplayName())) {
+            ShowPlugin.debugMap.put(player.getDisplayName(), true);
+            player.sendMessage(ChatColor.AQUA + "[ShowDebug] - " + ChatColor.GREEN + "Enabled");
+        } else {
+            ShowPlugin.debugMap.remove(player.getDisplayName());
+            player.sendMessage(ChatColor.AQUA + "[ShowDebug] - " + ChatColor.RED + "Disabled");
+        }
+        return true;
     }
 }
