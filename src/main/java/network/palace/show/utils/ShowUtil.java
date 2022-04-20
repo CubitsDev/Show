@@ -13,7 +13,6 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import scala.Int;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -362,7 +361,6 @@ public class ShowUtil {
             switch (slot) {
 
                 case 0: { // Head
-                    System.out.println("data: " + data);
 
                     // Try to parse skull
                     if (data.startsWith("skull")) {
