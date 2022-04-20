@@ -67,7 +67,7 @@ FakeBlock   <blockName> <x,y,z> <data>
 ```
 `BlockName` Human-readable name of the block. [Block Names & Ids](http://minecraft-ids.grahamedgecombe.com/)  
 `x,y,z` Coordinates to place the block at.  
-`data` Extra block data (Optional) [Block Data](# Fake Block Data)  
+`data` Extra block data (Optional) [Block Data](#Fake-Block-Data)  
 
 <details>
   <summary>Click To View 1.12 Syntax</summary>
@@ -91,7 +91,7 @@ Pulse   <x,y,z>
 ## Other Effects
 
 ### Lightning
-Summons and lightning bolt.  
+Summons a lightning bolt.  
 ```
 Lightning   <x,y,z>
 ```
@@ -99,7 +99,7 @@ Lightning   <x,y,z>
 <br/>
 
 ### Particles
-Summons and lightning bolt.
+Spawns particles.  
 ```
 Particle   <type>   <x,y,z> <xOffset>   <yOffset>   <zOffset>   <speed> <amount>
 ```
@@ -152,7 +152,7 @@ Command   <command>
 <br/>
 
 ### Repeating Actions
-Runs any show action many times.  
+Runs any show action a specified number of times.  
 ```
 Repeat  <occurences>    <delay> <action>
 ```
