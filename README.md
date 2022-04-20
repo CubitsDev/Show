@@ -16,7 +16,6 @@ Once installed, it'll auto generate folders.
 
 ## Tutorials
 Every element of a show is an 'action', and your show file consists of many actions.
-
 **Actions:** https://github.com/CubitsDev/Show/blob/master/syntax.md
 
 ### Getting Started
