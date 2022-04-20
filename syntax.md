@@ -234,15 +234,19 @@ PowerFirework   <x,y,z> <effects>   <directional-force-vector>
 ### Armorstand Definition
 All armorstands must be defined before being used.
 ```
-ArmorStand	<name>	<small>	<head_id>;<chest_id>;<legs_id>;<boots_id>;<hand_id>
+ArmorStand	<name>	<small>	<head>;<chest>;<legs>;<boots>;<mainhand>;<offhand>
 ```
 `name` Unique name for the new armorstand.  
 `small` Is the armorstand small: `TRUE`, `FALSE`.  
-`head_id` Numeric ID of item or `skull:<playerTextureResourceHash>` for player head.  
-`chest_id` Numeric ID of item or `<id>:data(<r,g,b>)` for dyed leather armor.  
-`legs_id` Numeric ID of item or `<id>:data(<r,g,b>)` for dyed leather armor.  
-`boots_id` Numeric ID of item or `<id>:data(<r,g,b>)` for dyed leather armor.  
-`hand_id` Numeric ID of item or `<id>:data(<r,g,b>)` for dyed leather armor.
+`head` Human-readable name of item or `skull:<playerTextureResourceHash>` for player head.  
+`chest` Human-readable name of item or `<name>:data(<r,g,b>)` for dyed leather armor.  
+`legs` Human-readable name of item or `<name>:data(<r,g,b>)` for dyed leather armor.  
+`boots` Human-readable name of item or `<name>:data(<r,g,b>)` for dyed leather armor.  
+`mainhand` Human-readable name of item.  
+`offhand` Human-readable name of item.  
+
+**IMPORTANT:**  
+Legacy (1.12) numeric IDs are no longer supported.  Please convert to modern names.  
 <br/>
 
 ### Spawn
