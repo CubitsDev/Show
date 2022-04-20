@@ -1,5 +1,6 @@
 # Show Plugin
 This plugin allows you to make amazing 'shows' in Minecraft with simple files alongside command blocks!  
+**Spigot:** https://www.spigotmc.org/resources/show-make-huge-spectaculars-in-minecraft.94141/  
 <br/>
 
 ## Installation
