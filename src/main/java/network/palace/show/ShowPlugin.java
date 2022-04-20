@@ -6,6 +6,8 @@ import com.craftmend.openaudiomc.api.interfaces.AudioApi;
 import com.craftmend.openaudiomc.spigot.OpenAudioMcSpigot;
 import lombok.Getter;
 import network.palace.show.commands.*;
+import network.palace.show.commands.show.ShowTabComplete;
+import network.palace.show.commands.showgen.ShowGenTabComplete;
 import network.palace.show.generator.ShowGenerator;
 import network.palace.show.listeners.ChunkListener;
 import network.palace.show.listeners.PlayerInteract;
@@ -83,6 +85,8 @@ public class ShowPlugin extends JavaPlugin {
         openAudioMcSpigot = OpenAudioMcSpigot.getInstance();
         FileUtil.setupFiles();
         this.getCommand("show").setExecutor(new ShowCommand());
+        this.getCommand("show").setTabCompleter(new ShowTabComplete());
+
         this.getCommand("showdebug").setExecutor(new ShowDebugCommand());
 
         FileConfiguration config = this.getConfig();
@@ -90,6 +94,7 @@ public class ShowPlugin extends JavaPlugin {
         if (config.getString("github.token") != null) {
             githubToken = config.getString("github.token");
             this.getCommand("showgen").setExecutor(new ShowgenCommand());
+            this.getCommand("showgen").setTabCompleter(new ShowGenTabComplete());
             Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[Show] Showgen has been enabled in show!");
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Show] Showgen will not be running in Show! To enable it, add a github token to the config!");
