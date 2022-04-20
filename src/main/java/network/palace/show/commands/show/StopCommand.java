@@ -12,10 +12,6 @@ import org.bukkit.command.CommandSender;
 public class StopCommand {
 
     public void handle(CommandSender sender, String filename)  {
-        if (filename == null | filename.equals("")) {
-            sender.sendMessage(ChatColor.RED + "/show stop [Show Name]");
-            return;
-        }
         if (!ShowPlugin.getShows().containsKey(filename)) {
             sender.sendMessage(ChatColor.RED + "----------------------------------------------");
             sender.sendMessage(ChatColor.GOLD + filename + ChatColor.AQUA + " is not running!");

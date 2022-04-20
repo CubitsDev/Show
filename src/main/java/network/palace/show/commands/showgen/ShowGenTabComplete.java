@@ -53,9 +53,9 @@ public class ShowGenTabComplete implements TabCompleter {
 
                 // Params
                 if (args.length == 2) {
-                    completions.addAll(Arrays.asList(actionTypes));
-                } else if (args.length == 3) {
-                    completions.addAll(Arrays.asList(topOrBottom));
+                    StringUtil.copyPartialMatches(args[1], Arrays.asList(actionTypes), completions);
+                } else if (args.length == 3 && !args[2].equals("")) { // Tab complete when start typing, but not if empty
+                    StringUtil.copyPartialMatches(args[2], Arrays.asList(topOrBottom), completions);
                 }
 
                 return completions;
@@ -65,11 +65,11 @@ public class ShowGenTabComplete implements TabCompleter {
 
                 // Return players coords
                 if (args.length == 2) { // X
-                    completions.add(player.getLocation().getX()+",");
+                    completions.add(player.getLocation().getBlockX()+"");
                 } else if (args.length == 3) { // Y
-                    completions.add(player.getLocation().getY()+",");
+                    completions.add(player.getLocation().getBlockY()+"");
                 } else if (args.length == 4) { // Z
-                    completions.add(player.getLocation().getZ()+",");
+                    completions.add(player.getLocation().getBlockZ()+"");
                 }
 
                 return completions;

@@ -21,7 +21,7 @@ public class StartCommand  {
             return;
         }
         if (filename == null | filename.equals("")) {
-            sender.sendMessage(ChatColor.RED + "/show start [Show Name]");
+            sender.sendMessage(ChatColor.RED + "/show start <name>");
             return;
         }
         if (ShowPlugin.getShows().containsKey(filename)) {
