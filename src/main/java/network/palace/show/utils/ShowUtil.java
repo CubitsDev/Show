@@ -3,13 +3,17 @@ package network.palace.show.utils;
 import network.palace.show.Show;
 import network.palace.show.ShowPlugin;
 import network.palace.show.exceptions.ShowParseException;
+import network.palace.show.handlers.ArmorData;
 import network.palace.show.handlers.BlockData;
 import network.palace.show.handlers.TitleType;
 import network.palace.show.sequence.ShowSequence;
 import org.bukkit.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import scala.Int;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -326,5 +330,138 @@ public class ShowUtil {
 
         Show s = ShowPlugin.getInstance().getShows().get(showName);
         if (s != null) s.debug();
+    }
+
+    /*
+    Input:
+    LEATHER_HELMET;LEATHER_CHESTPLATE;LEATHER_LEGGINGS;LEATHER_BOOTS;WOOD_SWORD;TOTEM_OF_UNDYING
+    skull:<playerTextureResourceHash>;LEATHER_CHESTPLATE;LEATHER_LEGGINGS;LEATHER_BOOTS;WOOD_SWORD;TOTEM_OF_UNDYING
+    LEATHER_HELMET;LEATHER_CHESTPLATE:(5,5,5);LEATHER_LEGGINGS;LEATHER_BOOTS;WOOD_SWORD;TOTEM_OF_UNDYING
+     */
+
+    /**
+     * Parses the armor data from the string.
+     * @param s Input string. Format: head;chest;leg;boot;hand;offhand
+     * @return The armor data
+     * @throws Exception If there was an error parsing data
+     */
+    public static ArmorData parseArmorData(String s) throws Exception {
+        String[] list = s.split(";");
+        ItemStack head = new ItemStack(Material.AIR);
+        ItemStack chestplate = new ItemStack(Material.AIR);
+        ItemStack leggings = new ItemStack(Material.AIR);
+        ItemStack boots = new ItemStack(Material.AIR);
+        ItemStack itemInMainHand = new ItemStack(Material.AIR);
+        ItemStack itemInOffHand = new ItemStack(Material.AIR);
+
+        // Get itemstack from string
+        int slot = -1;
+        for (String data : list) {
+            slot++;
+
+            switch (slot) {
+
+                case 0: { // Head
+                    System.out.println("data: " + data);
+
+                    // Try to parse skull
+                    if (data.startsWith("skull")) {
+                        head = HeadUtil.getPlayerHead(data.split(":")[1]);
+                        continue;
+                    }
+
+                    // Try to color leather armor
+                    if (data.endsWith(")")) {
+                        // Returns colored leather, or whatever item was passed in if not leather
+                        head = parseColoredArmor(data);
+                        continue;
+                    }
+
+                    if (MiscUtil.checkIfInt(data)) throw new ShowParseException("Legacy (1.12) numeric IDs are no longer supported.  Please convert to modern names.");
+                    head = new ItemStack(Material.valueOf(data)); // Get material
+                }
+                case 1: { // Chestplate
+
+                    // Try to color leather armor
+                    if (data.endsWith(")")) {
+                        // Returns colored leather, or whatever item was passed in if not leather
+                        chestplate = parseColoredArmor(data);
+                        continue;
+                    }
+
+                    if (MiscUtil.checkIfInt(data)) throw new ShowParseException("Legacy (1.12) numeric IDs are no longer supported.  Please convert to modern names.");
+                    chestplate = new ItemStack(Material.valueOf(data)); // Get material
+
+                }
+                case 2: { // Leggings
+
+                    // Try to color leather armor
+                    if (data.endsWith(")")) {
+                        // Returns colored leather, or whatever item was passed in if not leather
+                        leggings = parseColoredArmor(data);
+                        continue;
+                    }
+
+                    if (MiscUtil.checkIfInt(data)) throw new ShowParseException("Legacy (1.12) numeric IDs are no longer supported.  Please convert to modern names.");
+                    leggings = new ItemStack(Material.valueOf(data)); // Get material
+                }
+                case 3: { // Boots
+
+                    // Try to color leather armor
+                    if (data.endsWith(")")) {
+                        // Returns colored leather, or whatever item was passed in if not leather
+                        boots = parseColoredArmor(data);
+                        continue;
+                    }
+
+                    if (MiscUtil.checkIfInt(data)) throw new ShowParseException("Legacy (1.12) numeric IDs are no longer supported.  Please convert to modern names.");
+                    boots = new ItemStack(Material.valueOf(data)); // Get material
+                }
+                case 4: { // Main Hand
+                    if (MiscUtil.checkIfInt(data)) throw new ShowParseException("Legacy (1.12) numeric IDs are no longer supported.  Please convert to modern names.");
+                    itemInMainHand = new ItemStack(Material.valueOf(data)); // Get material
+                }
+                case 5: { // Off Hand
+                    if (MiscUtil.checkIfInt(data)) throw new ShowParseException("Legacy (1.12) numeric IDs are no longer supported.  Please convert to modern names.");
+                    itemInOffHand = new ItemStack(Material.valueOf(data)); // Get material
+                }
+
+            }
+
+        }
+
+        return new ArmorData(head, chestplate, leggings, boots, itemInMainHand, itemInOffHand);
+    }
+
+    /**
+     * Tries to get a piece of leather armor with color values.
+     * @param data Armor and color data. Format: LEATHER_HELMET:data(r,g,b)
+     * @return Colored item
+     */
+    private static ItemStack parseColoredArmor(String data) throws Exception {
+        String colors = data.split(":")[1]; // should get "data(r,g,b)"
+        colors = colors.replaceFirst("data", ""); // should get "(r,g,b)"
+        colors = colors.replaceAll("\\)", "");
+        colors = colors.replaceAll("\\(", "");  // should get "r,g,b"
+
+        int red = Integer.parseInt(colors.split(",")[0]);
+        int green = Integer.parseInt(colors.split(",")[1]);
+        int blue = Integer.parseInt(colors.split(",")[2]);
+
+        if (MiscUtil.checkIfInt(data.split(":")[0])) throw new ShowParseException("Legacy (1.12) numeric IDs are no longer supported.  Please convert to modern names.");
+        Material mat = Material.valueOf(data.split(":")[0]); // Get material
+
+        // If can't be colored, throw exception
+        if (!mat.toString().toLowerCase().contains("leather")) {
+            throw new ShowParseException("Material (" + mat + ") cannot be colored.");
+        }
+
+        // Apply colors
+        ItemStack temp = new ItemStack(mat, 1);
+        LeatherArmorMeta lam = (LeatherArmorMeta) temp.getItemMeta();
+        lam.setColor(Color.fromRGB(red, green, blue));
+        temp.setItemMeta(lam);
+
+        return temp;
     }
 }

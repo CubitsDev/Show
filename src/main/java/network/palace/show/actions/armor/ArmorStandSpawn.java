@@ -58,6 +58,9 @@ public class ArmorStandSpawn extends ShowAction {
             if (data.getItemInMainHand() != null) {
                 armor.setItemInHand(data.getItemInMainHand());
             }
+            if (data.getItemInOffHand() != null) {
+                armor.getEquipment().setItemInOffHand(data.getItemInOffHand());
+            }
         }
         stand.setStand(armor);
     }

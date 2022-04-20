@@ -169,8 +169,7 @@ public class Show {
                         continue;
                     }
                     boolean small = Boolean.parseBoolean(args[2]);
-                    //ArmorStand 0 false skull:myHash;299(234,124,41);300;301
-                    ArmorData armorData = parseArmorData(args[3]);
+                    ArmorData armorData = ShowUtil.parseArmorData(args[3]);
                     ShowStand stand = new ShowStand(id, small, armorData);
                     standmap.put(id, stand);
                     continue;
@@ -391,82 +390,6 @@ public class Show {
 
     private double rad(double v) {
         return (v * Math.PI) / 180;
-    }
-
-    private ArmorData parseArmorData(String s) throws Exception {
-        String[] list = s.split(";");
-        ItemStack head = new ItemStack(Material.AIR);
-        ItemStack chestplate = new ItemStack(Material.AIR);
-        ItemStack leggings = new ItemStack(Material.AIR);
-        ItemStack boots = new ItemStack(Material.AIR);
-        ItemStack itemInMainHand = new ItemStack(Material.AIR);
-        int i = 0;
-        if (list.length >= 4) {
-            for (String st : list) {
-                i++;
-                if (i == 1) {
-                    if (st.startsWith("skull")) {
-                        head = HeadUtil.getPlayerHead(st.split(":")[1]);
-                        continue;
-                    }
-                }
-                if (st.contains("(")) {
-                    String[] color = st.split("\\(");
-                    String[] l = color[0].split(":");
-                    int id = Integer.parseInt(l[0]);
-                    byte dam = l.length > 1 ? Byte.parseByte(l[1]) : 0;
-                    Material type = Material.getMaterial(ShowUtil.convertMaterialNoData(id).name());
-                    if (!type.name().toLowerCase().contains("leather")) {
-                        continue;
-                    }
-                    ItemStack temp = new ItemStack(type, 1, dam);
-                    LeatherArmorMeta lam = (LeatherArmorMeta) temp.getItemMeta();
-                    String[] cls = color[1].replaceAll("[()]", "").split(",");
-                    lam.setColor(Color.fromRGB(Integer.parseInt(cls[0]), Integer.parseInt(cls[1]),
-                            Integer.parseInt(cls[2])));
-                    temp.setItemMeta(lam);
-                    switch (i) {
-                        case 1:
-                            head = temp;
-                            continue;
-                        case 2:
-                            chestplate = temp;
-                            continue;
-                        case 3:
-                            leggings = temp;
-                            continue;
-                        case 4:
-                            boots = temp;
-                            continue;
-                        case 5:
-                            itemInMainHand = temp;
-                            continue;
-                    }
-                    continue;
-                }
-                String[] l = st.split(":");
-                int id = Integer.parseInt(l[0]);
-                byte dam = l.length > 1 ? Byte.parseByte(l[1]) : 0;
-                ItemStack temp = new ItemStack(Material.getMaterial(ShowUtil.convertMaterialNoData(id).name()), 1, dam);
-                switch (i) {
-                    case 1:
-                        head = temp;
-                        continue;
-                    case 2:
-                        chestplate = temp;
-                        continue;
-                    case 3:
-                        leggings = temp;
-                        continue;
-                    case 4:
-                        boots = temp;
-                        continue;
-                    case 5:
-                        itemInMainHand = temp;
-                }
-            }
-        }
-        return new ArmorData(head, chestplate, leggings, boots, itemInMainHand);
     }
 
     public List<UUID> getNearPlayers() {
