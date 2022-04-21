@@ -99,7 +99,7 @@ Effect	bigFire	BURST,255;255;255&WHITE,ORANGE,FLICKER
 ########################### Announcer
 
 # Spawn announcer
-#ArmorStand	announcer	false DIAMOND_HELMET;DIAMOND_CHESTPLATE;LEATHER_LEGGINGS:data(4,89,21);IRON_BOOTS;WOODEN_SWORD;STONE
+ArmorStand	announcer	false DIAMOND_HELMET;DIAMOND_CHESTPLATE;LEATHER_LEGGINGS:data(4,89,21);IRON_BOOTS;WOODEN_SWORD;STONE
 0   ArmorStand  announcer   Spawn -5,10,9,-90
 
 
