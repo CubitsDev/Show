@@ -26,10 +26,9 @@ Show	Name    example
 0	Title	subtitle	10	10	40	&eShow starting soon!
 
 
-# Podium raise up
-0	Block	STONE	0,11,0
-1	Block	STONE	0,12,0
-2	Block	STONE	0,13,0
+# Podium raise up (Real blocks)
+1	Block	OAK_FENCE	0,10,9
+1	Block	OAK_PRESSURE_PLATE	0,11,9
 
 
 # Paste castle in background
@@ -37,13 +36,20 @@ Show	Name    example
 
 
 # Change stairs to yellow (Packets only)
-0	FakeBlock	SANDSTONE_STAIRS	0,11,0  STAIRS,TOP,SOUTH,STRAIGHT
-0	FakeBlock	SANDSTONE_STAIRS	1,10,0  STAIRS,TOP,SOUTH,STRAIGHT
-0	FakeBlock	SANDSTONE_STAIRS	2,9,0  STAIRS,TOP,SOUTH,STRAIGHT
+0.0	FakeBlock	SANDSTONE_STAIRS	4,7,8	STAIRS,BOTTOM,WEST,STRAIGHT
+0.0	FakeBlock	SANDSTONE_STAIRS	4,7,9	STAIRS,BOTTOM,WEST,STRAIGHT
+0.0	FakeBlock	SANDSTONE_STAIRS	4,7,10	STAIRS,BOTTOM,WEST,STRAIGHT
+0.0	FakeBlock	SANDSTONE_STAIRS	3,8,8	STAIRS,BOTTOM,WEST,STRAIGHT
+0.0	FakeBlock	SANDSTONE_STAIRS	3,8,9	STAIRS,BOTTOM,WEST,STRAIGHT
+0.0	FakeBlock	SANDSTONE_STAIRS	3,8,10	STAIRS,BOTTOM,WEST,STRAIGHT
+0.0	FakeBlock	SANDSTONE_STAIRS	2,9,8	STAIRS,BOTTOM,WEST,STRAIGHT
+0.0	FakeBlock	SANDSTONE_STAIRS	2,9,9	STAIRS,BOTTOM,WEST,STRAIGHT
+0.0	FakeBlock	SANDSTONE_STAIRS	2,9,10	STAIRS,BOTTOM,WEST,STRAIGHT
 
 
-# Pulse redstone signal to start command blocks for waterfall
-5	Pulse	0,5,0
+# Pulse redstone signal to dispense water
+5	Pulse	1,8,9
+6	Pulse	1,8,9
 
 
 
@@ -52,11 +58,11 @@ Show	Name    example
 ########################### Castle Explosion
 
 # Lightning strikes top of castle
-5	Lightning	0,56,0
+5	Lightning	-5,14,9
 
 
 # Explosion on strike
-5.5 Particle	SMOKE	0,56.3,0	2	0.2	4	0	20
+5.5 Particle	SMOKE	-5,14,9	2	0.2	4	0	20
 
 
 # Explosion sound
@@ -64,27 +70,27 @@ Show	Name    example
 
 
 # Blocks from castle fly out at audience
-5.6	Fountain	SPRUCE_PLANKS	5	0,56,0	2,0.3,0
+5.6	Fountain	STONE	5	-4,14,9	2,0.3,0
 
 
 # Explosion fireworks
 Effect	fire	BURST,255;255;255&RED,YELLOW,FLICKER
-5.6	Firework	0,56,0	fire	1	0,1,1	1
-5.6	Firework	0,56,0	fire	1	0,1,-1	1
+5.6	Firework	-5,14,9	fire	1	0,1,1	1
+5.6	Firework	-5,14,9	fire	1	0,1,-1	1
 
 
 # Big firework comes to audience
 Effect	bigFire	BURST,255;255;255&WHITE,ORANGE,FLICKER
-5.6	PowerFirework	0,56,0	bigFire	1,1,0
+5.6	PowerFirework	-5,14,9	bigFire	1,1,0
 
 
 # Make all players glow yellow
-6	Glow	RED 0,12,0	50
+0	Glow	RED 0,11,9	50
 12	GlowDone
 
 
 # Explosions all over ground from blocks that fly out (Repeating action)
-8 Repeat 5 1 Particle	SMOKE	10,12,0	2	0.2	4	0	20
+8 Repeat 5 1 Particle	SMOKE	10,14,9	2	0.2	4	0	20
 
 
 
@@ -93,30 +99,30 @@ Effect	bigFire	BURST,255;255;255&WHITE,ORANGE,FLICKER
 ########################### Announcer
 
 # Spawn announcer
-ArmorStand	announcer	false   298,299,300,301,1
-0   ArmorStand  announcer   Spawn -6,12,0,0
+#ArmorStand	announcer	false DIAMOND_HELMET;DIAMOND_CHESTPLATE;LEATHER_LEGGINGS:data(4,89,21);IRON_BOOTS;WOODEN_SWORD;STONE
+0   ArmorStand  announcer   Spawn -5,10,9,-90
 
 
 # Open door
-0.2	FakeBlock	DARK_OAK_DOOR   -5,12,0 DOOR,BOTTOM,WEST,TRUE,LEFT
-0.2	FakeBlock	DARK_OAK_DOOR   -5,13,0 DOOR,TOP,WEST,TRUE,LEFT
+0.2	FakeBlock	DARK_OAK_DOOR	-4,10,9	DOOR,BOTTOM,WEST,TRUE,LEFT
+0.2	FakeBlock	DARK_OAK_DOOR	-4,11,9	DOOR,TOP,WEST,TRUE,LEFT
 
 
 # Walk up to podium
-1   ArmorStand announcer    Move    0,12,0  3
+1   ArmorStand announcer    Move    -1,10,9  3
 
 
 # Close door
-1.5	FakeBlock	DARK_OAK_DOOR   -5,12,0 DOOR,BOTTOM,WEST,FALSE,LEFT
-1.5	FakeBlock	DARK_OAK_DOOR   -5,13,0 DOOR,TOP,WEST,FALSE,LEFT
+1.5	FakeBlock	DARK_OAK_DOOR	-4,10,9	DOOR,BOTTOM,WEST,FALSE,LEFT
+1.5	FakeBlock	DARK_OAK_DOOR	-4,11,9	DOOR,TOP,WEST,FALSE,LEFT
 
 
 # Wave
-4   ArmorStand  announcer Position  ARM_LEFT    0,5,3   0.7
+4   ArmorStand  announcer Position  ARM_LEFT    255,5,3   0.7
 
 
 # Play cat disk (2257)
-4   Music   2257
+1	Music	2266
 
 
 # Turn around
@@ -124,7 +130,7 @@ ArmorStand	announcer	false   298,299,300,301,1
 
 
 # Walk away
-6.7   ArmorStand announcer    Move    -6,12,0  3
+6.8   ArmorStand announcer    Move    -5,10,9  3
 
 
 # Despawn
