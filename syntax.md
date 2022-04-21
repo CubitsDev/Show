@@ -111,7 +111,7 @@ Particle   <type>   <x,y,z> <xOffset>   <yOffset>   <zOffset>   <speed> <amount>
 <br/>
 
 ### Glow with the Show
-Gives all players within the radius a colored helmet.
+Gives all players within the radius a colored helmet.  
 ```
 Glow   <color>  <x,y,z> <radius>
 ```
@@ -209,7 +209,7 @@ Effect	<name>	<shape>,<colors>,<fadeColors>,<flicker>,<trail>
 <br/>
 
 ### Vanilla Firework
-Shoots a firework.
+Shoots a firework rocket.  
 ```
 Firework    <x,y,z> <effects>   <time>  <directional-force-vector>	1
 ```
@@ -220,7 +220,7 @@ Firework    <x,y,z> <effects>   <time>  <directional-force-vector>	1
 <br/>
 
 ### Power Firework
-Shoots a firework rocket that moves.
+Shoots a firework that explodes instantly.  
 ```
 PowerFirework   <x,y,z> <effects>   <directional-force-vector>
 ```
