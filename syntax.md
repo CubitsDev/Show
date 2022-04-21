@@ -244,6 +244,12 @@ ArmorStand	<name>	<small>	<head>;<chest>;<legs>;<boots>;<mainhand>;<offhand>
 `boots` Human-readable name of item or `<name>:data(<r,g,b>)` for dyed leather armor.  
 `mainhand` Human-readable name of item.  
 `offhand` Human-readable name of item.  
+  
+**Skull Texture Hash:**  
+You can use a site such as [Minecraft Heads](https://minecraft-heads.com/) to find the head you want.  
+Then copy the long string from the `Other > Value` section at the bottom.  
+It should look something like this:  
+```eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTRlYTBkYWIwYjdmMWU1YzRlMzNhYmE2ZTk3NWU5OTkyYTg4N2Q4NzJkYzdkZDEwN2Q4ZTM5ODFkYzg3Mzk1OCJ9fX0=```  
 
 **IMPORTANT:**  
 Legacy (1.12) numeric IDs are no longer supported.  Please convert to modern names.  
