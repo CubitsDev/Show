@@ -397,7 +397,7 @@ public class Show {
     Input:
     LEATHER_HELMET;LEATHER_CHESTPLATE;LEATHER_LEGGINGS;LEATHER_BOOTS;WOOD_SWORD;TOTEM_OF_UNDYING
     skull:<playerTextureResourceHash>;LEATHER_CHESTPLATE;LEATHER_LEGGINGS;LEATHER_BOOTS;WOOD_SWORD;TOTEM_OF_UNDYING
-    LEATHER_HELMET;LEATHER_CHESTPLATE:(5,5,5);LEATHER_LEGGINGS;LEATHER_BOOTS;WOOD_SWORD;TOTEM_OF_UNDYING
+    LEATHER_HELMET;LEATHER_CHESTPLATE:(5,5,5);LEATHER_LEGGINGS:data(7,7,7);LEATHER_BOOTS;WOOD_SWORD;TOTEM_OF_UNDYING
      */
 
     /**
@@ -499,8 +499,8 @@ public class Show {
      * @return Colored item
      */
     private ItemStack parseColoredArmor(String data) throws Exception {
-        String colors = data.split(":")[1]; // should get "data(r,g,b)"
-        colors = colors.replaceFirst("data", ""); // should get "(r,g,b)"
+        String colors = data.split(":")[1]; // should get "data(r,g,b)" or "(r,g,b)"
+        if (colors.toLowerCase().contains("data")) colors = colors.replaceFirst("data", ""); // should get "(r,g,b)"
         colors = colors.replaceAll("\\)", "");
         colors = colors.replaceAll("\\(", "");  // should get "r,g,b"
 
