@@ -2,20 +2,21 @@ package network.palace.show.utils;
 
 import network.palace.show.Show;
 import network.palace.show.ShowPlugin;
+import network.palace.show.enums.BlockDataType;
 import network.palace.show.exceptions.ShowParseException;
-import network.palace.show.handlers.BlockData;
 import network.palace.show.handlers.TitleType;
 import network.palace.show.sequence.ShowSequence;
 import org.bukkit.*;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.*;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Marc
@@ -23,25 +24,90 @@ import java.util.List;
  */
 public class ShowUtil {
 
+    /*
+    Whole Line:
+     0      1      2       3             4
+    TIME ACTION MATERIAL COORDS      BLOCK_DATA
+    3.0	FakeBlock AIR	 14,5,1   STAIRS:DATA:DATA
+    .
+    .
+    Block Data:
+      0           1         2          3       4
+    STAIRS   :   HALF :   FACING  :  SHAPE           -> STAIRS:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:INNER_LEFT/...
+    FENCE    :   FACE                                -> FENCE:NORTH/EAST/SOUTH/WEST ex) FENCE:NORTH:SOUTH
+    GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST ex) GLASS_PANE:NORTH:SOUTH
+    TRAPDOOR  :  HALF :   FACING  :  OPEN            -> TRAPDOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE
+    DOOR     :   HALF  :  FACING  :  OPEN  :  HINGE  -> DOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE:LEFT/RIGHT
+    SLAB    :    TYPE                                -> SLAB:TOP/BOTTOM/DOUBLE
+     */
     public static BlockData getBlockData(String s) throws ShowParseException {
-        String[] list;
-        if (s.contains(":")) {
-            list = s.split(":");
-        } else {
-            list = null;
-        }
         try {
-            int id;
-            byte data;
-            if (list != null) {
-                id = Integer.parseInt(list[0]);
-                data = Byte.parseByte(list[1]);
-            } else {
-                id = Integer.parseInt(s);
-                data = (byte) 0;
+            String[] params = s.split("\u0009");
+            BlockData blockData = Material.valueOf(params[2].toUpperCase()).createBlockData();
+
+            // Block data string params, or null if none
+            if (params.length >= 5) {
+                String[] dataParams = params[4].split(",");
+                BlockDataType type = BlockDataType.valueOf(dataParams[0].toUpperCase());
+
+                switch (type) {
+                    case STAIRS: {
+                        ((Stairs) blockData).setHalf(Bisected.Half.valueOf(dataParams[1].toUpperCase()));
+                        ((Stairs) blockData).setFacing(BlockFace.valueOf(dataParams[2].toUpperCase()));
+                        ((Stairs) blockData).setShape(Stairs.Shape.valueOf(dataParams[3].toUpperCase()));
+                        break;
+                    }
+                    case FENCE: {
+                        String[] faces = dataParams[1].split(":");
+
+                        ((Fence) blockData).setFace(BlockFace.valueOf(faces[0].toUpperCase()), true);
+                        if (faces.length >= 2) ((Fence) blockData).setFace(BlockFace.valueOf(faces[1].toUpperCase()), true);
+                        if (faces.length >= 3) ((Fence) blockData).setFace(BlockFace.valueOf(faces[2].toUpperCase()), true);
+                        if (faces.length >= 4) ((Fence) blockData).setFace(BlockFace.valueOf(faces[3].toUpperCase()), true);
+                        break;
+                    }
+                    case GLASS_PANE: {
+                        // Plain glass-pane uses the fence block-data not the glass-pane because spaghetti
+                        if (blockData.getMaterial().equals(Material.GLASS_PANE)) {
+                            String[] faces = dataParams[1].split(":");
+
+                            ((Fence) blockData).setFace(BlockFace.valueOf(faces[0].toUpperCase()), true);
+                            if (faces.length >= 2) ((Fence) blockData).setFace(BlockFace.valueOf(faces[1].toUpperCase()), true);
+                            if (faces.length >= 3) ((Fence) blockData).setFace(BlockFace.valueOf(faces[2].toUpperCase()), true);
+                            if (faces.length >= 4) ((Fence) blockData).setFace(BlockFace.valueOf(faces[3].toUpperCase()), true);
+
+                        } else {
+                            String[] faces = dataParams[1].split(":");
+
+                            ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[0].toUpperCase()), true);
+                            if (faces.length >= 2) ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[1].toUpperCase()), true);
+                            if (faces.length >= 3) ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[2].toUpperCase()), true);
+                            if (faces.length >= 4) ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[3].toUpperCase()), true);
+                        }
+                        break;
+                    }
+                    case TRAPDOOR: {
+                        ((TrapDoor) blockData).setHalf(Bisected.Half.valueOf(dataParams[1].toUpperCase()));
+                        ((TrapDoor) blockData).setFacing(BlockFace.valueOf(dataParams[2].toUpperCase()));
+                        ((TrapDoor) blockData).setOpen(Boolean.parseBoolean(dataParams[3].toUpperCase()));
+                        break;
+                    }
+                    case DOOR: {
+                        ((Door) blockData).setHalf(Bisected.Half.valueOf(dataParams[1].toUpperCase()));
+                        ((Door) blockData).setFacing(BlockFace.valueOf(dataParams[2].toUpperCase()));
+                        ((Door) blockData).setOpen(Boolean.parseBoolean(dataParams[3].toUpperCase()));
+                        ((Door) blockData).setHinge(Door.Hinge.valueOf(dataParams[4].toUpperCase()));
+                        break;
+                    } case SLAB: {
+                        ((Slab) blockData).setType(Slab.Type.valueOf(dataParams[1].toUpperCase()));
+                        break;
+                    }
+                }
             }
-            return new BlockData(id, data);
-        } catch (Exception ignored) {
+
+            return blockData;
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new ShowParseException("Invalid Block ID or Block data");
         }
     }
