@@ -82,7 +82,7 @@ public class GenerateCommand {
                     bottom = !args[1].equalsIgnoreCase("top");
                     delayPerLayer = Double.parseDouble(args[2]);
                 } else {
-                    bottom = false;
+                    bottom = true;
                     delayPerLayer = 0;
                 }
 
@@ -158,6 +158,6 @@ public class GenerateCommand {
     }
 
     private boolean compare(int x, int y, boolean inverted) {
-        return inverted == (x <= y);
+        return inverted == (x >= y);
     }
 }
