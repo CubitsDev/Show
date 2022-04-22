@@ -320,7 +320,7 @@ SLAB,<type>
 `half` Right side up or upside down: `BOTTOM`, `TOP`.  
 `facing` Direction its facing: `NORTH`, `EAST`, `SOUTH`, `WEST`.  
 `shape` For stairs, it's the shape: `INNER_LEFT`, `INNER_RIGHT`, `OUTER_LEFT`, `OUTER_RIGHT`, `STRAIGHT`.  
-`face` Direction(s) it has faces on, seperated by `:`. Example: `NORTH:EAST:SOUTH`.  This will have faces on all sides except `WEST`.  Omit all block data for no faces.
+`face` Direction(s) it has faces on, seperated by `:`. Example: `NORTH:EAST:SOUTH`.  This will have faces on all sides except `WEST`.  Omit all block data for no faces.  
 `open` If it's open or not: `TRUE`, `FALSE`.  
 `hinge` Where the door hinge is: `LEFT`, `RIGHT`.  
 `type` What type of slab: `TOP`, `BOTTOM`, `DOUBLE`.  
