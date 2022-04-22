@@ -239,9 +239,9 @@ ArmorStand	<name>	<small>	<head>;<chest>;<legs>;<boots>;<mainhand>;<offhand>
 `name` Unique name for the new armorstand.  
 `small` Is the armorstand small: `TRUE`, `FALSE`.  
 `head` Human-readable name of item or `skull:<playerTextureResourceHash>` for player head.  
-`chest` Human-readable name of item or `<name>:data(<r,g,b>)` for dyed leather armor.  
-`legs` Human-readable name of item or `<name>:data(<r,g,b>)` for dyed leather armor.  
-`boots` Human-readable name of item or `<name>:data(<r,g,b>)` for dyed leather armor.  
+`chest` Human-readable name of item or `<name>:(<r,g,b>)` for dyed leather armor.  
+`legs` Human-readable name of item or `<name>:(<r,g,b>)` for dyed leather armor.  
+`boots` Human-readable name of item or `<name>:(<r,g,b>)` for dyed leather armor.  
 `mainhand` Human-readable name of item.  
 `offhand` Human-readable name of item.  
   
@@ -320,7 +320,7 @@ SLAB,<type>
 `half` Right side up or upside down: `BOTTOM`, `TOP`.  
 `facing` Direction its facing: `NORTH`, `EAST`, `SOUTH`, `WEST`.  
 `shape` For stairs, it's the shape: `INNER_LEFT`, `INNER_RIGHT`, `OUTER_LEFT`, `OUTER_RIGHT`, `STRAIGHT`.  
-`face` Direction(s) it has faces on, must include all 4, separated by `:`. Example: `NORTH-TRUE:EAST-FALSE:SOUTH-FALSE:WEST-TRUE`.  
+`face` Direction(s) it has faces on, seperated by `:`. Example: `NORTH:EAST:SOUTH`.  This will have faces on all sides except `WEST`.  Omit all block data for no faces.
 `open` If it's open or not: `TRUE`, `FALSE`.  
 `hinge` Where the door hinge is: `LEFT`, `RIGHT`.  
 `type` What type of slab: `TOP`, `BOTTOM`, `DOUBLE`.  
