@@ -15,9 +15,10 @@ public class ArmorData {
     private ItemStack leggings;
     private ItemStack boots;
     private ItemStack itemInMainHand;
+    private ItemStack itemInOffHand;
 
     @Override
     public String toString() {
-        return head.toString() + " " + chestplate.toString() + " " + leggings.toString() + " " + boots.toString() + " " + itemInMainHand.toString();
+        return head.toString() + " " + chestplate.toString() + " " + leggings.toString() + " " + boots.toString() + " " + itemInMainHand.toString() + " " + itemInOffHand.toString();
     }
 }
