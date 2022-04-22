@@ -40,7 +40,7 @@ public class FakeBlockAction extends ShowAction {
             }
         } catch (Exception e) {
             Bukkit.getLogger().severe("FakeBlockAction -" + ChatColor.RED + "Error sending FakeBlockAction for type (" +
-                    data + ") at location " + loc.getX() + "," + loc.getY() + "," + loc.getZ() + " at time " +
+                    data.getMaterial() + ") at location " + loc.getX() + "," + loc.getY() + "," + loc.getZ() + " at time " +
                     time + " for show " + show.getName());
             e.printStackTrace();
         }

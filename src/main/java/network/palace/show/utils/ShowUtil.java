@@ -2,6 +2,7 @@ package network.palace.show.utils;
 
 import network.palace.show.Show;
 import network.palace.show.ShowPlugin;
+import network.palace.show.enums.BlockDataType;
 import network.palace.show.exceptions.ShowParseException;
 import network.palace.show.handlers.TitleType;
 import network.palace.show.sequence.ShowSequence;
@@ -33,8 +34,8 @@ public class ShowUtil {
     Block Data:
       0           1         2          3       4
     STAIRS   :   HALF :   FACING  :  SHAPE           -> STAIRS:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:INNER_LEFT/...
-    FENCE    :   FACE                                -> FENCE:NORTH/EAST/SOUTH/WEST ex) FENCE:NORTH-TRUE:SOUTH-FALSE
-    GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST ex) GLASS_PANE:NORTH-TRUE:SOUTH-FALSE
+    FENCE    :   FACE                                -> FENCE:NORTH/EAST/SOUTH/WEST ex) FENCE:NORTH:SOUTH
+    GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST ex) GLASS_PANE:NORTH:SOUTH
     TRAPDOOR  :  HALF :   FACING  :  OPEN            -> TRAPDOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE
     DOOR     :   HALF  :  FACING  :  OPEN  :  HINGE  -> DOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE:LEFT/RIGHT
     SLAB    :    TYPE                                -> SLAB:TOP/BOTTOM/DOUBLE
@@ -59,11 +60,10 @@ public class ShowUtil {
                     case FENCE: {
                         String[] faces = dataParams[1].split(":");
 
-                        // 1 for each face, true or false
-                        ((Fence) blockData).setFace(BlockFace.valueOf(faces[0].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[0].split("-")[1].toUpperCase()));
-                        ((Fence) blockData).setFace(BlockFace.valueOf(faces[1].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[1].split("-")[1].toUpperCase()));
-                        ((Fence) blockData).setFace(BlockFace.valueOf(faces[2].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[2].split("-")[1].toUpperCase()));
-                        ((Fence) blockData).setFace(BlockFace.valueOf(faces[3].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[3].split("-")[1].toUpperCase()));
+                        ((Fence) blockData).setFace(BlockFace.valueOf(faces[0].toUpperCase()), true);
+                        if (faces.length >= 2) ((Fence) blockData).setFace(BlockFace.valueOf(faces[1].toUpperCase()), true);
+                        if (faces.length >= 3) ((Fence) blockData).setFace(BlockFace.valueOf(faces[2].toUpperCase()), true);
+                        if (faces.length >= 4) ((Fence) blockData).setFace(BlockFace.valueOf(faces[3].toUpperCase()), true);
                         break;
                     }
                     case GLASS_PANE: {
@@ -71,19 +71,18 @@ public class ShowUtil {
                         if (blockData.getMaterial().equals(Material.GLASS_PANE)) {
                             String[] faces = dataParams[1].split(":");
 
-                            // 1 for each face, true or false
-                            ((Fence) blockData).setFace(BlockFace.valueOf(faces[0].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[0].split("-")[1].toUpperCase()));
-                            ((Fence) blockData).setFace(BlockFace.valueOf(faces[1].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[1].split("-")[1].toUpperCase()));
-                            ((Fence) blockData).setFace(BlockFace.valueOf(faces[2].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[2].split("-")[1].toUpperCase()));
-                            ((Fence) blockData).setFace(BlockFace.valueOf(faces[3].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[3].split("-")[1].toUpperCase()));
+                            ((Fence) blockData).setFace(BlockFace.valueOf(faces[0].toUpperCase()), true);
+                            if (faces.length >= 2) ((Fence) blockData).setFace(BlockFace.valueOf(faces[1].toUpperCase()), true);
+                            if (faces.length >= 3) ((Fence) blockData).setFace(BlockFace.valueOf(faces[2].toUpperCase()), true);
+                            if (faces.length >= 4) ((Fence) blockData).setFace(BlockFace.valueOf(faces[3].toUpperCase()), true);
+
                         } else {
                             String[] faces = dataParams[1].split(":");
 
-                            // 1 for each face, true or false
-                            ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[0].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[0].split("-")[1].toUpperCase()));
-                            ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[1].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[1].split("-")[1].toUpperCase()));
-                            ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[2].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[2].split("-")[1].toUpperCase()));
-                            ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[3].split("-")[0].toUpperCase()), Boolean.parseBoolean(faces[3].split("-")[1].toUpperCase()));
+                            ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[0].toUpperCase()), true);
+                            if (faces.length >= 2) ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[1].toUpperCase()), true);
+                            if (faces.length >= 3) ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[2].toUpperCase()), true);
+                            if (faces.length >= 4) ((GlassPane) blockData).setFace(BlockFace.valueOf(faces[3].toUpperCase()), true);
                         }
                         break;
                     }
@@ -391,7 +390,7 @@ public class ShowUtil {
                 .filter(p -> p.hasPermission("show.debug") && ShowPlugin.debugMap.containsKey(p.getDisplayName()))
                 .forEach(p -> p.sendMessage(ChatColor.AQUA + "[ShowDebug - " + showName + "] " + ChatColor.YELLOW + message));
 
-        Show s = ShowPlugin.getShows().get(showName);
+        Show s = ShowPlugin.getInstance().getShows().get(showName);
         if (s != null) s.debug();
     }
 }

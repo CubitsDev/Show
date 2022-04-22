@@ -43,7 +43,7 @@ public class ShowGenerator {
         generatorSessions.remove(uuid);
     }
 
-    public String postGist(List<FakeBlockAction> actions, String name) {
+    public String postGist(List<FakeBlockAction> actions, String name) throws Exception {
         Webb webb = Webb.create();
 
         JsonObject obj = new JsonObject();
@@ -95,15 +95,14 @@ public class ShowGenerator {
     Block Data:
       0           1         2          3       4
     STAIRS   :   HALF :   FACING  :  SHAPE           -> STAIRS:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:INNER_LEFT/...
-    FENCE    :   FACE                                -> FENCE:NORTH/EAST/SOUTH/WEST ex) FENCE:NORTH-TRUE:SOUTH-FALSE
-    GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST ex) GLASS_PANE:NORTH-TRUE:SOUTH-FALSE
+    FENCE    :   FACE                                -> FENCE:NORTH/EAST/SOUTH/WEST ex) FENCE:NORTH:SOUTH
+    GLASS_PANE : FACE                                -> GLASS_PANE:NORTH/EAST/SOUTH/WEST ex) GLASS_PANE:NORTH:SOUTH
     TRAPDOOR  :  HALF :   FACING  :  OPEN            -> TRAPDOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE
     DOOR     :   HALF  :  FACING  :  OPEN  :  HINGE  -> DOOR:BOTTOM/TOP:NORTH/EAST/SOUTH/WEST:TRUE/FALSE:LEFT/RIGHT
     SLAB    :    TYPE                                -> SLAB:TOP/BOTTOM/DOUBLE
      */
     private String getBlockDataString(BlockData blockData) {
         StringBuilder dataString = new StringBuilder();
-
         if (blockData instanceof Stairs) {
             String half = ((Stairs) blockData).getHalf().toString();
             String facing = ((Stairs) blockData).getFacing().toString();
@@ -111,35 +110,25 @@ public class ShowGenerator {
             dataString = new StringBuilder("STAIRS," + half.toUpperCase() + "," + facing.toUpperCase() + "," + shape.toUpperCase());
 
         } else if (blockData instanceof Fence) {
+            if (((Fence) blockData).getFaces().isEmpty()) return "";
             dataString = new StringBuilder("FENCE,");
 
             // True for included
             for (BlockFace face : ((Fence) blockData).getFaces()) {
-                dataString.append(face.toString().toUpperCase()).append("-TRUE:");
+                dataString.append(face.toString().toUpperCase()).append(":");
             }
-
-            // False for others
-            if (!dataString.toString().contains("NORTH")) dataString.append("NORTH-FALSE:");
-            if (!dataString.toString().contains("EAST")) dataString.append("EAST-FALSE:");
-            if (!dataString.toString().contains("SOUTH")) dataString.append("SOUTH-FALSE:");
-            if (!dataString.toString().contains("WEST")) dataString.append("WEST-FALSE:");
 
             // Remove last character
             dataString = new StringBuilder(StringUtils.chop(dataString.toString()));
 
         } else if (blockData instanceof GlassPane) {
+            if (((GlassPane) blockData).getFaces().isEmpty()) return "";
             dataString = new StringBuilder("GLASS_PANE,");
 
             // True for included
             for (BlockFace face : ((GlassPane) blockData).getFaces()) {
-                dataString.append(face.toString().toUpperCase()).append("-TRUE:");
+                dataString.append(face.toString().toUpperCase()).append(":");
             }
-
-            // False for others
-            if (!dataString.toString().contains("NORTH")) dataString.append("NORTH-FALSE:");
-            if (!dataString.toString().contains("EAST")) dataString.append("EAST-FALSE:");
-            if (!dataString.toString().contains("SOUTH")) dataString.append("SOUTH-FALSE:");
-            if (!dataString.toString().contains("WEST")) dataString.append("WEST-FALSE:");
 
             // Remove last character
             dataString = new StringBuilder(StringUtils.chop(dataString.toString()));

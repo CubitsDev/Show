@@ -1,4 +1,4 @@
-package network.palace.show.utils;
+package network.palace.show.enums;
 
 public enum BlockDataType {
     STAIRS,
