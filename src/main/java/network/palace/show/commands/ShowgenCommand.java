@@ -17,10 +17,7 @@ public class ShowgenCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.GREEN + "ShowGen Commands:");
-            sender.sendMessage(ChatColor.AQUA + "/showgen generate [action] [bottom/top] [delay per layer] [timestamp]" + ChatColor.GREEN + "- Generate blocks of show actions with one command");
-            sender.sendMessage(ChatColor.AQUA + "/showgen setcorner x,y,z" + ChatColor.GREEN + "- Set the location of the final north-west-bottom corner to help give real coordinate values");
-            sender.sendMessage(ChatColor.AQUA + "/showgen setinitialscene " + ChatColor.GREEN + "- Set the initial scene for a generator session");
+            sendHelpMsg(sender);
             return true;
         }
 
@@ -40,12 +37,20 @@ public class ShowgenCommand implements CommandExecutor {
                 new SetInitialCommand().handle(sender);
                 break;
             default:
-                sender.sendMessage(ChatColor.GREEN + "ShowGen Commands:");
-                sender.sendMessage(ChatColor.AQUA + "/showgen generate [action] [bottom/top] [delay per layer] [timestamp]" + ChatColor.GREEN + "- Generate blocks of show actions with one command");
-                sender.sendMessage(ChatColor.AQUA + "/showgen setcorner x,y,z" + ChatColor.GREEN + "- Set the location of the final north-west-bottom corner to help give real coordinate values");
-                sender.sendMessage(ChatColor.AQUA + "/showgen setinitialscene " + ChatColor.GREEN + "- Set the initial scene for a generator session");
+                sendHelpMsg(sender);
                 break;
         }
         return true;
+    }
+
+    /**
+     * Sends a help message to the player.
+     * @param sender Who to send it to.
+     */
+    private void sendHelpMsg(CommandSender sender) {
+        sender.sendMessage(ChatColor.GREEN + "ShowGen Commands:");
+        sender.sendMessage(ChatColor.AQUA + "/showgen generate [action] [bottom/top] [delay per layer] [timestamp]" + ChatColor.GREEN + "- Generate blocks of show actions with one command");
+        sender.sendMessage(ChatColor.AQUA + "/showgen setcorner x,y,z" + ChatColor.GREEN + "- Set the location of the final north-west-bottom corner to help give real coordinate values");
+        sender.sendMessage(ChatColor.AQUA + "/showgen setinitialscene " + ChatColor.GREEN + "- Set the initial scene for a generator session");
     }
 }

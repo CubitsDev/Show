@@ -20,10 +20,6 @@ public class StartCommand  {
             sender.sendMessage(ChatColor.RED + "Invalid world!");
             return;
         }
-        if (filename == null | filename.equals("")) {
-            sender.sendMessage(ChatColor.RED + "/show start [Show Name]");
-            return;
-        }
         if (ShowPlugin.getShows().containsKey(filename)) {
             sender.sendMessage(ChatColor.RED + "----------------------------------------------");
             sender.sendMessage(ChatColor.RED + "That show is already running!");
