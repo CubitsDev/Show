@@ -1,11 +1,9 @@
 package network.palace.show.commands.show;
 
 import network.palace.show.ShowPlugin;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.io.File;
@@ -14,6 +12,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ShowTabComplete implements TabCompleter {
+
+    List<String> shows;
+    public ShowTabComplete() {
+        shows = getShows();
+    }
 
     /*
     Commands:
@@ -50,7 +53,7 @@ public class ShowTabComplete implements TabCompleter {
         // Handle subcommand args
         switch (args[0]) {
             case "start": {
-                StringUtil.copyPartialMatches(args[1], Arrays.asList(getStoppedShows(((Player)sender).getWorld())), completions);
+                StringUtil.copyPartialMatches(args[1], getStoppedShows(), completions);
                 return completions;
             }
             case "stop": {
@@ -64,28 +67,44 @@ public class ShowTabComplete implements TabCompleter {
     }
 
     /**
-     * Gets all shows that arent currently running in the world.
-     * @param world What world
+     * Gets stopped shows, not from disk.
+     * @return Stopped show names (minus .show)
+     */
+    private List<String> getStoppedShows() {
+        List<String> stoppedShows = shows;
+        for (String name : ShowPlugin.getShows().keySet()) stoppedShows.remove(name);
+        return stoppedShows;
+    }
+
+    /**
+     * Gets all shows directly from disk.
      * @return The show names (minus .show)
      */
-    private String[] getStoppedShows(World world) {
-        File f = new File("plugins/Show/shows/" + world.getName());
-        String[] fileNames = f.list();
-        if (fileNames == null) return new String[]{};
-
-        ArrayList<String> names = new ArrayList<>(List.of(fileNames));
+    private List<String> getShows() {
+        List<String> names = new ArrayList<>();
+        listFiles("plugins/Show/shows/", names);
 
         // Strip ".show"
         ArrayList<String> tempNames = new ArrayList<>();
         for (String name : names) {
             tempNames.add(name.replaceAll(".show", ""));
         }
-        names = tempNames;
+        return tempNames;
+    }
 
-        // Remove running shows
-        for (String name : ShowPlugin.getShows().keySet()) names.remove(name);
+    private void listFiles(String directoryName, List<String> files) {
+        File root = new File(directoryName);
 
-        return names.toArray(new String[0]);
+        // Get all files from a directory.
+        File[] fList = root.listFiles();
+        if(fList != null)
+            for (File file : fList) {
+                if (file.isFile()) {
+                    files.add(file.getName());
+                } else if (file.isDirectory()) {
+                    listFiles(file.getAbsolutePath(), files);
+                }
+            }
     }
 
 }
