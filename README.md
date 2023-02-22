@@ -52,15 +52,15 @@ Once you have obtained a token, open the `config.yml` file in the `Show` plugin 
 Once added and your has server restarted, you can start generating show files!  
 
 Start by selecting your default 'scene' with a WorldEdit wand.  
-Your new scene has to be the same size so make sure you know how big the region is.  
 Following this, run `/showgen setinitialscene`.  
 This will save the state of your initial scene, so we can compare it with your new scenes.  
 
-Next head to the `North West bottom` corner of your initial scene (Press F3).  
+Next head to the `North West bottom` corner of the **DESTINATION** scene.  This is where the blocks will be placed.  In most cases this will be the same as your initial scene. (Press F3).  
 This is super important that it's the north west corner as this is the corner used to determine where to build your new scene.  
 Once found, run `/showgen setcorner <x,y,z>`.  
 
 Next, head to your new scene. Select it the same as you did the initial one, same size, same 1st position, etc (but different coordinates).  
+Your new scene has to be the same size as the initial scene so make sure you know how big the region is.  
 Finally, do `/showgen generate FakeBlock 1`.  
 
 If you have done everything correct, this should send you a link with your new lines you can add to your show file!  
